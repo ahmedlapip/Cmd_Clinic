@@ -105,8 +105,8 @@ public class Receptionist {
     }
 
 
-    public String reserveAppointment(String patientName, String date, String time) {
-        Appointment newAppointment = new Appointment(patientName, date, time);
+    public String reserveAppointment(String patientName, String Phonenumber, String date, String time) {
+        Appointment newAppointment = new Appointment(patientName, Phonenumber, date, time);
         appointments.add(newAppointment);
         return "Appointment reserved for " + patientName + " on " + date + " at " + time + ".";
     }
@@ -147,37 +147,4 @@ public class Receptionist {
     }
 
 
-    public static class Appointment {
-        private String patientName;
-        private String date;
-        private String time;
-        Patient patient=new Patient();
-
-
-        public Appointment(String patientName, String date, String time) {
-            this.patientName = patientName;
-            this.date = date;
-            this.time = time;
-        }
-
-        public String getPatientName() {
-            return patientName;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public String getTime() {
-            return time;
-        }
-        public void setReservation(){
-
-        }
-
-        @Override
-        public String toString() {
-            return "Appointment for " + patientName + " on " + date + " at " + time;
-        }
-    }
 }

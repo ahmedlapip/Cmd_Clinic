@@ -167,7 +167,7 @@ public class Dental_clinic {
         switch (select)
         {
             case 1 :
-                Receptionist;
+                ;
                 break;
             case 2 :
                 Receptionist.reserve();

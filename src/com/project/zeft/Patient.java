@@ -10,7 +10,7 @@ protected String patientHistory, age, gender, bloodType;
 protected float weight=0;
 protected float height=0;
 Scanner sc = new Scanner(System.in);
-
+ArrayList<Appointment> appointmentList = new ArrayList<>();
 /* Reserve an appointment with specific date and time. ● Cancel reservation. ● Check prices for appointments. ● Search for doctor with name or mobile number ● Display available appointments for reservation*/
 public Patient() {}
 
@@ -66,15 +66,53 @@ public Patient() {}
             }
         }
     }
-
-
-    public void checkPrices(){
-     //  System.out.println("you Have Appointments on "+" "+);
+    public void reserveAppointment(String date, String time){
+        System.out.println("Enter date and time for appointment");
+        date = sc.nextLine();
+        time = sc.nextLine();
+        Appointment newAppointment = new Appointment(this.getName(),this.getMobileNumber(),date,time);
+        appointmentList.add(newAppointment);
+    }
+    public void cancelReservation(String date, String time){
+        System.out.println("Enter date and time to cancel appointment");
+        date = sc.nextLine();
+        time = sc.nextLine();
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getDate().equals(date) && appointment.getTime().equals(time)) {
+                appointmentList.remove(appointment);
+                return;
+            }
+        }
+        System.out.println("No appointment found for " + date + " at " + time + ".");
 
     }
+    public void checkPrices(){
+       System.out.println("you Have Appointments on ");
+        int cnt=0;
+       for (Appointment appointment : appointmentList) {
+           if(appointment.getPatientName().equals(this.getName())&& appointment.getPhoneNumber().equals(this.getMobileNumber()) && cnt > 0){
+            System.out.println(appointment.getDate() + " at " + appointment.getTime());
+            cnt++;
+           }
+          }
+       if(cnt>0) {
+            System.out.println("Total appointments: " + cnt + "appointment(s)  " + "total Price : " + cnt * Doctor.Price + "EGP");
+        }
+       else {
+           System.out.println("No appointments found");
+       }
+    }
 
-    public void searchForDoctor(){
-
+    public void searchForDoctor(ArrayList<Doctor>doctorList){
+        System.out.println("Enter Name or Mobile Number to search for doctor");
+        String search = sc.nextLine();
+        for (Doctor doctor : doctorList) {
+            if (doctor.getName().equals(search) || doctor.getMobileNumber().equals(search)) {
+                System.out.println("Doctor found: " + doctor.getName());
+                return;
+            }
+        }
+        System.out.println("No doctor found");
     }
     public void ShowAvailableAppointments(){
 
@@ -110,6 +148,40 @@ public Patient() {}
 
     public void setWeight(float weight) {
         this.weight = weight;
+    }
+
+    public void For_Menu(){
+        System.out.println("As Patient What to want to do : \n1-> Reserve Appointment\n2-> Cancel Reservation\n3-> Check Prices\n4-> Search for Doctor\n5-> Show Available Appointments ");
+        int choice = sc.nextInt();
+        switch (choice){
+            case 1 -> {
+                String date,time;
+                System.out.println("Enter date and time for appointment");
+                date = sc.nextLine();
+                time = sc.nextLine();
+               this.reserveAppointment(date,time);
+            }
+            case 2 -> {
+                String date,time;
+                System.out.println("Enter date and time to cancel appointment");
+                date = sc.nextLine();
+                time = sc.nextLine();
+                this.cancelReservation(date,time);
+            }
+            case 3 -> {
+                this.checkPrices();
+            }
+            case 4 -> {
+                ArrayList<Doctor> doctorList = new ArrayList<>();
+                this.searchForDoctor(doctorList);
+            }
+            case 5 -> {
+                this.ShowAvailableAppointments();
+            }
+            default -> {
+                System.out.println("Invalid choice");
+            }
+        }
     }
 
 

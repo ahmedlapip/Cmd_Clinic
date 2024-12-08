@@ -4,6 +4,7 @@ package com.project.zeft;
 import java.util.ArrayList;
 
 public class Doctor extends User {
+    public static final int Price=400;
     private String doctorName;
     private String specialization;
     private int startHour;
