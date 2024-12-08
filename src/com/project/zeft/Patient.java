@@ -27,13 +27,15 @@ public Patient() {}
    }
 
     ///full info
-    public Patient(String firstName, String lastName, String username, String email, String password, String mobileNumber, String age, String gender, float weight, float height){
+    public Patient(String firstName, String lastName, String username, String email, String password, String mobileNumber, String age, String gender,String bloodType,String patientHistory, float weight, float height){
 
         super(firstName, lastName, username, email, password, mobileNumber);
         this.age = age;
         this.gender = gender;
         this.weight = weight;
         this.height = height;
+        this.bloodType = bloodType;
+        this.patientHistory = patientHistory;
     }
 
     public void change (){
