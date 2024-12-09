@@ -2,110 +2,113 @@ package OOP;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
 class SignUp extends User {
-Scanner scanner = new Scanner(System.in);
-Login loginSystem ;
+    private final Scanner scanner = new Scanner(System.in);
+    private final Login loginSystem = new Login();
 
-
-public void Sign_UP(ArrayList<Patient>patients,ArrayList<Doctor>doctors,ArrayList<Receptionist>receptionists){
-    System.out.println("Welcome to the Dental Clinic. Do you want to Login or Signup?");
+    public void signUp(ArrayList<Patient> patients, ArrayList<Doctor> doctors, ArrayList<Receptionist> receptionists,ArrayList<Appointment> app) {
+        System.out.println("Welcome to the Dental Clinic. Do you want to Login or Signup?");
         System.out.println("[1] SignUp \n[2] Login");
         System.out.print("Enter Your choice: ");
-    int Log_Or_Sign = scanner.nextInt();
 
-        if (Log_Or_Sign == 1){
-        System.out.println("select (doctor/patient/receptionist):");
-        System.out.print("Enter Your Choice: ");
-        String userType = scanner.nextLine().toLowerCase();
+        int logOrSign = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
 
-        switch (userType) {
-            case "doctor" -> {
-                String firstname, lastname, username, email, password, mobilenumber, availableDays, availableHours;
-                System.out.print("First Name: ");
-                 firstname= scanner.nextLine();
-                System.out.print("Last Name: ");
-                lastname = scanner.nextLine();
-                System.out.print("Username: ");
-                username = scanner.nextLine();
-                System.out.print("Email: ");
-                email = scanner.nextLine();
-                System.out.print("Password: ");
-                password = scanner.nextLine();
-                System.out.print("Mobile Number: ");
-                mobilenumber = scanner.nextLine();
-                System.out.print("Available Days: ");
-                availableDays = scanner.nextLine();
-                System.out.print("Available Hours: ");
-                availableHours = scanner.nextLine();
-                Doctor doctor = new Doctor(firstname, lastname, username, email, password, mobilenumber, availableDays, availableHours);
-                doctors.add(doctor);
-                System.out.println("Successfully Signed Up As A Doctor");
+        if (logOrSign == 1) {
+            System.out.print("signUp As (doctor/patient/receptionist): ");
+            String userType = scanner.nextLine().trim().toLowerCase();
 
+            switch (userType) {
+                case "doctor" -> registerDoctor(doctors);
+                case "patient" -> registerPatient(patients);
+                case "receptionist" -> registerReceptionist(receptionists);
+                default -> System.out.println("Invalid selection. Please enter 'doctor', 'patient', or 'receptionist'.");
             }
-            case "patient" -> {
-                String firstname, lastname, username, email, password, mobilenumber, patientHistory, bloodType, gender,age;
-                float weight,height;
-               System.out.print("First Name: ");
-               firstname = scanner.nextLine();
-               System.out.print("Last Name: ");
-               lastname = scanner.nextLine();
-               System.out.print("Username: ");
-               username = scanner.nextLine();
-               System.out.print("Password: ");
-               password = scanner.nextLine();
-               System.out.print("Email: ");
-               email = scanner.nextLine();
-               System.out.print("Mobile Number: ");
-               mobilenumber = scanner.nextLine();
-               System.out.print("Patient History: ");
-               patientHistory = scanner.nextLine();
-               System.out.print("Blood Type: ");
-               bloodType = scanner.nextLine().toUpperCase();
-               System.out.print("Gender: ");
-               gender = scanner.nextLine();
-               System.out.print("Age: ");
-               age = scanner.nextLine();
-               System.out.print("Weight (KG): ");
-               weight = scanner.nextFloat();
-               System.out.print("Height (cm): ");
-               height = scanner.nextFloat();
-               Patient patient = new Patient(firstname, lastname, username, password, email, mobilenumber, patientHistory, bloodType, gender, age, weight, height);
-               patients.add(patient);
-               System.out.println(" successfully signed up as patient");
-            }
-            case "receptionist" -> {
-                String firstname, lastname, username, email, password, mobilenumber;
-                System.out.print("First Name: ");
-                firstname = scanner.nextLine();
-                System.out.print("Last Name: ");
-                lastname = scanner.nextLine();
-                System.out.print("Username: ");
-                username = scanner.nextLine();
-                System.out.print("Password: ");
-                password = scanner.nextLine();
-                System.out.print("Email: ");
-                email = scanner.nextLine();
-                System.out.print("Mobile Number: ");
-                mobilenumber = scanner.nextLine();
-                System.out.print("Gender: ");
-                String gender = scanner.nextLine();
-                System.out.print("Age: ");
-                int rage = scanner.nextInt();
-                Receptionist receptionist = new Receptionist(firstname, lastname, username, password, email, mobilenumber, gender, rage);
-                receptionists.add(receptionist);
-                System.out.println(" successfully signed up as receptionist");
-
-            }
-            default -> {
-                System.out.println("Please Enter Only One Of those: 'doctor', 'patient', or 'receptionist'.");
-            }
-
+        } else if (logOrSign == 2) {
+            loginSystem.logIn(doctors, patients, receptionists,app);
+        } else {
+            System.out.println("Invalid choice. Please enter 1 for SignUp or 2 for Login.");
         }
-        scanner.close();
     }
-        else if (Log_Or_Sign == 2) {
-        loginSystem.Log_IN(doctors, patients, receptionists);
-}
-}
-}
 
+    private void registerDoctor(ArrayList<Doctor> doctors) {
+        System.out.println("Registering as Doctor:");
+        String firstname = input("First Name: ");
+        String lastname = input("Last Name: ");
+        String username = input("Username: ");
+        String email = input("Email: ");
+        String password = input("Password: ");
+        String mobileNumber = input("Mobile Number: ");
+        String availableDays = input("Available Days: ");
+        String availableHours = input("Available Hours: ");
+        String specialization = input("Speciality: ");
+
+        Doctor doctor = new Doctor(firstname, lastname, username, email, password, mobileNumber, availableDays, availableHours,specialization);
+        doctors.add(doctor);
+        System.out.println("Successfully Signed Up As A Doctor.");
+    }
+
+    private void registerPatient(ArrayList<Patient> patients) {
+        System.out.println("Registering as Patient:");
+        String firstname = input("First Name: ");
+        String lastname = input("Last Name: ");
+        String username = input("Username: ");
+        String email = input("Email: ");
+        String password = input("Password: ");
+        String mobileNumber = input("Mobile Number: ");
+        String patientHistory = input("Patient History: ");
+        String bloodType = input("Blood Type: ").toUpperCase();
+        String gender = input("Gender: ");
+        String age = input("Age: ");
+        float weight = inputFloat("Weight (KG): ");
+        float height = inputFloat("Height (cm): ");
+
+        Patient patient = new Patient(firstname, lastname, username, password, email, mobileNumber, patientHistory, bloodType, gender, age, weight, height);
+        patients.add(patient);
+        System.out.println("Successfully Signed Up As A Patient.");
+    }
+
+    private void registerReceptionist(ArrayList<Receptionist> receptionists) {
+        System.out.println("Registering as Receptionist:");
+        String firstname = input("First Name: ");
+        String lastname = input("Last Name: ");
+        String username = input("Username: ");
+        String email = input("Email: ");
+        String password = input("Password: ");
+        String mobileNumber = input("Mobile Number: ");
+        String gender = input("Gender: ");
+        int age = inputInt("Age: ");
+
+        Receptionist receptionist = new Receptionist(firstname, lastname, username, password, email, mobileNumber, gender, age);
+        receptionists.add(receptionist);
+        System.out.println("Successfully Signed Up As A Receptionist.");
+    }
+
+    private String input(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
+    }
+
+    private int inputInt(String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextInt()) {
+            System.out.print("Invalid input. Please enter a number: ");
+            scanner.next();
+        }
+        int value = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        return value;
+    }
+
+    private float inputFloat(String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextFloat()) {
+            System.out.print("Invalid input. Please enter a valid number: ");
+            scanner.next();
+        }
+        float value = scanner.nextFloat();
+        scanner.nextLine(); // Consume newline
+        return value;
+    }
+}

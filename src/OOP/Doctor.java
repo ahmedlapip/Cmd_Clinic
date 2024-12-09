@@ -1,46 +1,52 @@
-
 package OOP;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Doctor extends User {
+    public static final int PRICE = 400;
     private String doctorName;
     private String specialization;
     private int startHour;
     private int endHour;
-    private ArrayList<ArrayList<Integer>> dayHours;
-    private ArrayList<ArrayList<Prescription>> patientPrescriptions;
+
+    // Stores available hours for each day of the week
+    private List<List<Integer>> dayHours;
+    // Maps patient IDs to their prescriptions
+    private Map<Integer, List<Prescription>> patientPrescriptions;
+
     private final String[] days = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
-    public Doctor(String firstName, String lastName, String username, String email, String password, String mobileNumber,String available_days, String available_hours) {
+    public Doctor(String firstName, String lastName, String username, String email, String password, String mobileNumber, String specialization) {
         super(firstName, lastName, username, email, password, mobileNumber);
         this.doctorName = firstName + " " + lastName;
+        this.specialization = specialization;
         this.dayHours = new ArrayList<>();
-        this.patientPrescriptions = new ArrayList<>();
+        this.patientPrescriptions = new HashMap<>();
         initializeSchedule();
     }
-    public Doctor(String username, String password) {
-        this.username = username;
-        this.password = password;
+
+    public Doctor(String firstname, String lastname, String username, String email, String password, String mobileNumber, String availableDays, String availableHours, String specialization) {
     }
 
-    public String getUsername() {
-        return username;
+    public static Doctor fromString(String line) {
+        String[] parts = line.split(",");
+        String firstName = parts[0];
+        String lastName = parts[1];
+        String username = parts[2];
+        String email = parts[3];
+        String password = parts[4];
+        String mobileNumber = parts[5];
+        String specialization = parts[6];
+        return new Doctor(firstName, lastName, username, email, password, mobileNumber, specialization);
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-
+    // Initializes the schedule structure
     private void initializeSchedule() {
         for (int i = 0; i < 7; i++) {
             dayHours.add(new ArrayList<>());
-        }
-    }
-
-    public void initializePatients(int patientCount) {
-        for (int i = 0; i < patientCount; i++) {
-            patientPrescriptions.add(new ArrayList<>());
         }
     }
 
@@ -74,7 +80,7 @@ public class Doctor extends User {
             System.out.println("Invalid appointment time: " + hour);
             return;
         }
-        ArrayList<Integer> appointments = dayHours.get(dayIndex);
+        List<Integer> appointments = dayHours.get(dayIndex);
         if (appointments.contains(hour)) {
             System.out.println("Cannot schedule an appointment at " + hour + " (already booked)");
             return;
@@ -89,7 +95,7 @@ public class Doctor extends User {
             System.out.println("Invalid day: " + day);
             return;
         }
-        ArrayList<Integer> appointments = dayHours.get(dayIndex);
+        List<Integer> appointments = dayHours.get(dayIndex);
         if (appointments.remove((Integer) hour)) {
             System.out.println("Appointment at " + hour + " on " + day + " has been canceled.");
         } else {
@@ -103,7 +109,7 @@ public class Doctor extends User {
             System.out.println("Invalid day: " + day);
             return;
         }
-        ArrayList<Integer> appointments = dayHours.get(dayIndex);
+        List<Integer> appointments = dayHours.get(dayIndex);
         if (appointments.isEmpty()) {
             System.out.println("No appointments for " + day);
         } else {
@@ -114,49 +120,64 @@ public class Doctor extends User {
         }
     }
 
-    public void receptionistContactInfo(Receptionist receptionist) {
-        System.out.println("Receptionist Name: " + receptionist.getName());
-        System.out.println("Receptionist Email: " + receptionist.getEmail());
-//        System.out.println("Receptionist Contact: " + receptionist.getContact());
+    public void initializePatients(int patientCount) {
+        for (int i = 0; i < patientCount; i++) {
+            patientPrescriptions.put(i, new ArrayList<>());
+        }
     }
 
-    public void patientInfo(Patient patient) {
-        System.out.println("Patient Name: " + patient.getName());
-        System.out.println("Patient Age: " + patient.getAge());
-        System.out.println("Patient Email: " + patient.getEmail());
-//        System.out.println("Patient Contact: " + patient.getContact());
-    }
-
-    public void addPrescription(int patientIndex, String medicine, String notes) {
-        if (patientIndex < 0 || patientIndex >= patientPrescriptions.size()) {
-            System.out.println("Invalid patient index: " + patientIndex);
+    public void addPrescription(int patientId, String medicine, String notes) {
+        if (!patientPrescriptions.containsKey(patientId)) {
+            System.out.println("Invalid patient ID: " + patientId);
             return;
         }
         Prescription prescription = new Prescription(this.doctorName);
         prescription.writePrescription(medicine, notes);
-        patientPrescriptions.get(patientIndex).add(prescription);
-        System.out.println("Prescription added for patient " + (patientIndex + 1));
+        patientPrescriptions.get(patientId).add(prescription);
+        System.out.println("Prescription added for patient ID " + patientId);
     }
 
-    public void viewPrescriptions(int patientIndex) {
-        if (patientIndex < 0 || patientIndex >= patientPrescriptions.size()) {
-            System.out.println("Invalid patient index: " + patientIndex);
+    public void viewPrescriptions(int patientId) {
+        if (!patientPrescriptions.containsKey(patientId)) {
+            System.out.println("Invalid patient ID: " + patientId);
             return;
         }
-        ArrayList<Prescription> prescriptions = patientPrescriptions.get(patientIndex);
+        List<Prescription> prescriptions = patientPrescriptions.get(patientId);
         if (prescriptions.isEmpty()) {
-            System.out.println("No prescriptions for patient " + (patientIndex + 1));
+            System.out.println("No prescriptions for patient ID " + patientId);
         } else {
-            System.out.println("Prescriptions for patient " + (patientIndex + 1) + ":");
+            System.out.println("Prescriptions for patient ID " + patientId + ":");
             for (Prescription prescription : prescriptions) {
                 prescription.printPrescription();
             }
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        // Doctor's basic information
+        sb.append("Doctor Name: ").append(doctorName).append("\n");
+        sb.append("Specialization: ").append(specialization).append("\n");
+
+        // Schedule information
+        sb.append("Schedule:\n");
+        for (int i = 0; i < days.length; i++) {
+            sb.append(days[i]).append(": ");
+            if (dayHours.get(i).isEmpty()) {
+                sb.append("No appointments\n");
+            } else {
+                sb.append(dayHours.get(i)).append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
     public static class Prescription {
         private String doctorName;
-        private ArrayList<String> medicines;
+        private List<String> medicines;
         private String notes;
 
         public Prescription(String doctorName) {
@@ -175,21 +196,4 @@ public class Doctor extends User {
             System.out.println("Notes: " + notes);
         }
     }
-
-
-
-    public void doctorMenu(){
-
-        System.out.println("doctor");
-    }
-//    @Override
-//    public String toString() {
-//        return super.toString() + "," + availableDays + "," + availableHours;
-//    }
-
-    public static Doctor fromString(String data) {
-        String[] parts = data.split(",");
-        return new Doctor(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]);
-    }
 }
-

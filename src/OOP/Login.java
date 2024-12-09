@@ -3,92 +3,97 @@ package OOP;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
 public class Login {
-  Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
-    public void out(Patient[] patients)
-    {
+    public void out(Patient[] patients) {
         System.out.println("Patients loaded:");
         for (Patient patient : patients) {
             System.out.println(patient);
         }
     }
-    public boolean validateDoctor(String username, String password, ArrayList<Doctor> doctors) {
+
+    // Validate Doctor's login credentials
+    public void validateDoctor(String username, String password, ArrayList<Doctor> doctors) {
         for (Doctor doctor : doctors) {
             if (doctor.getUsername().equals(username) && doctor.getPassword().equals(password)) {
-                return true;
+               System.out.println("Doctor logged in successfully!");
+                return ;
+            }
+            else {
+                System.out.println("Invalid credentials. Please check your username and password for Doctor login.");
             }
         }
-        return false;
+
     }
 
     // Validate Patient's login credentials
-    public boolean validatePatient(String username, String password,ArrayList<Patient> patients) {
+    public void validatePatient( ArrayList<Patient> patients,ArrayList<Doctor> doctors,ArrayList<Appointment> appointmentList) {
+        System.out.println("Enter username: ");
+        String username = scanner.nextLine().trim();
+        System.out.println("Enter password: ");
+        String password = scanner.nextLine().trim();
         for (Patient patient : patients) {
             if (patient.getUsername().equals(username) && patient.getPassword().equals(password)) {
-                return true;
+                System.out.println("Patient logged in successfully!");
+                patient.patientMenu(doctors,appointmentList);
+                return;
+            }
+            else {
+                System.out.println("Invalid credentials. Please check your username and password for Patient login.");
             }
         }
-        return false;
+
     }
 
     // Validate Receptionist's login credentials
-    public boolean validateReceptionist(String username, String password, ArrayList<Receptionist> receptionists) {
+    public void validateReceptionist(String username, String password, ArrayList<Receptionist> receptionists) {
         for (Receptionist receptionist : receptionists) {
             if (receptionist.getUsername().equals(username) && receptionist.getPassword().equals(password)) {
-                return true;
+               System.out.println("Receptionist logged in successfully!");
+                return;
+            }
+            else {
+                System.out.println("Invalid credentials. Please check your username and password for Receptionist login.");
             }
         }
-        return false;
+
     }
 
-    public void Log_IN(ArrayList<Doctor> doctors, ArrayList<Patient> patients, ArrayList<Receptionist> receptionists){
-        String username, password;
-        boolean valid = false;
+    public void logIn(ArrayList<Doctor> doctors, ArrayList<Patient> patients, ArrayList<Receptionist> receptionists,ArrayList<Appointment> appointmentList) {
         System.out.println("[1] Login As A Doctor \n[2] Login As A Patient \n[3] Login As A Receptionist");
         System.out.print("Choose login type: ");
-        int choice =  scanner.nextInt();
 
+        // Ensure valid numeric choice
+        int choice = getValidIntegerInput();
+        scanner.nextLine(); // Consume newline
 
         System.out.print("Enter username: ");
-        username = scanner.nextLine();
+        String username = scanner.nextLine().trim();
         System.out.print("Enter password: ");
-        password = scanner.nextLine();
-
-        boolean isValid;
+        String password = scanner.nextLine().trim();
 
         switch (choice) {
-            case 1:
-                isValid = this.validateDoctor(username, password,doctors);
-                if (isValid) {
-                    System.out.println("Doctor logged in successfully!");
-                } else {
-                    System.out.println("Invalid credentials for Doctor.");
-                }
-                break;
-            case 2:
-                isValid = this.validatePatient(username, password,patients);
-                if (isValid) {
-                    System.out.println("Patient logged in successfully!");
-                    Patient.patientMenu();
-                } else {
-                    System.out.println("Invalid credentials for Patient.");
-                }
-                break;
-            case 3:
-                isValid = this.validateReceptionist(username, password,receptionists);
-                if (isValid) {
-                    System.out.println("Receptionist logged in successfully!");
-                } else {
-                    System.out.println("Invalid credentials for Receptionist.");
-                }
-                break;
-            default:
-                System.out.println("Invalid choice.");
+            case 1 -> {
+             validateDoctor(username, password, doctors);
+            }
+            case 2 -> {
+                validatePatient( patients,doctors,appointmentList);
+
+            }
+            case 3 -> {
+               validateReceptionist(username, password, receptionists);
+
+            }
+            default -> System.out.println("Invalid choice. Please select between 1, 2, or 3.");
         }
     }
 
+    private int getValidIntegerInput() {
+        while (!scanner.hasNextInt()) {
+            System.out.print("Invalid input. Please enter a valid number: ");
+            scanner.next();
+        }
+        return scanner.nextInt();
     }
-
-
+}

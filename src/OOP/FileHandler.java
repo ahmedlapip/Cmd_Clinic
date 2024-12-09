@@ -80,4 +80,28 @@ public class FileHandler {
         }
         return receptionistList;
     }
+    public static void saveAppointments(ArrayList<Appointment> appointmentList) {
+        try (FileWriter writer = new FileWriter("appointments.txt")) {
+            for (Appointment appointment : appointmentList) {
+                writer.write(appointment.toString() + "\n");
+            }
+            System.out.println("Appointments saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static ArrayList<Appointment> loadAppointments() {
+        ArrayList<Appointment> appointmentList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("appointments.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                appointmentList.add(Appointment.fromString(line));
+            }
+            System.out.println("Appointments loaded successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return appointmentList;
+    }
+
 }
