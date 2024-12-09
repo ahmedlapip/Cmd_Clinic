@@ -40,11 +40,10 @@ class SignUp extends User {
         String email = input("Email: ");
         String password = input("Password: ");
         String mobileNumber = input("Mobile Number: ");
-        String availableDays = input("Available Days: ");
-        String availableHours = input("Available Hours: ");
         String specialization = input("Speciality: ");
 
-        Doctor doctor = new Doctor(firstname, lastname, username, email, password, mobileNumber, availableDays, availableHours,specialization);
+
+        Doctor doctor = new Doctor(firstname,lastname,username,email,password,mobileNumber,specialization);
         doctors.add(doctor);
         System.out.println("Successfully Signed Up As A Doctor.");
     }
@@ -85,30 +84,5 @@ class SignUp extends User {
         System.out.println("Successfully Signed Up As A Receptionist.");
     }
 
-    private String input(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine();
-    }
 
-    private int inputInt(String prompt) {
-        System.out.print(prompt);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Invalid input. Please enter a number: ");
-            scanner.next();
-        }
-        int value = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        return value;
-    }
-
-    private float inputFloat(String prompt) {
-        System.out.print(prompt);
-        while (!scanner.hasNextFloat()) {
-            System.out.print("Invalid input. Please enter a valid number: ");
-            scanner.next();
-        }
-        float value = scanner.nextFloat();
-        scanner.nextLine(); // Consume newline
-        return value;
-    }
 }

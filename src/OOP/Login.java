@@ -1,9 +1,8 @@
 package OOP;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Login {
+public class Login extends User {
     private final Scanner scanner = new Scanner(System.in);
 
     public void out(Patient[] patients) {
@@ -29,10 +28,10 @@ public class Login {
 
     // Validate Patient's login credentials
     public void validatePatient( ArrayList<Patient> patients,ArrayList<Doctor> doctors,ArrayList<Appointment> appointmentList) {
-        System.out.println("Enter username: ");
-        String username = scanner.nextLine().trim();
-        System.out.println("Enter password: ");
-        String password = scanner.nextLine().trim();
+
+        String username =input("Enter username: ");
+
+        String password = input("Enter password: ");
         for (Patient patient : patients) {
             if (patient.getUsername().equals(username) && patient.getPassword().equals(password)) {
                 System.out.println("Patient logged in successfully!");
@@ -68,10 +67,10 @@ public class Login {
         int choice = getValidIntegerInput();
         scanner.nextLine(); // Consume newline
 
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine().trim();
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine().trim();
+
+        String username =input("Enter username: ");
+
+        String password = input("Enter password: ");
 
         switch (choice) {
             case 1 -> {

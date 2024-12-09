@@ -8,13 +8,29 @@ public class Appointment {
     private String date;
     private String time;
     private String phoneNumber;
+    private String doctorName;
+    private String Appointed ="false";
+    private String doctorNum;
 
     // Constructor
-    public Appointment(String patientName, String phoneNumber, String date, String time) {
+
+    public String getDoctorNum() {
+        return doctorNum;
+    }
+
+    public void setDoctorNum(String doctorNum) {
+        this.doctorNum = doctorNum;
+    }
+
+    public Appointment(String patientName, String phoneNumber, String date, String time, String doctorName, String doctorNum, String Appointed) {
         this.patientName = patientName;
         this.date = date;
         this.time = time;
         this.phoneNumber = phoneNumber;
+        this.doctorName = doctorName;
+        this.Appointed = Appointed;
+        this.doctorNum=doctorNum;
+
     }
 
     // Getters and Setters
@@ -28,6 +44,22 @@ public class Appointment {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getAppointed() {
+        return Appointed;
+    }
+
+    public void setAppointed(String appointed) {
+        Appointed = appointed;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 
     public void setPhoneNumber(String phoneNumber) {
@@ -59,10 +91,10 @@ public class Appointment {
     // Convert a string back to an Appointment object
     public static Appointment fromString(String line) {
         String[] fields = line.split(",");
-        if (fields.length != 4) {
+        if (fields.length >7) {
             throw new IllegalArgumentException("Invalid appointment data: " + line);
         }
-        return new Appointment(fields[0], fields[1], fields[2], fields[3]);
+        return new Appointment(fields[0], fields[1], fields[2], fields[3],fields[4],fields[5],fields[6]);
     }
 
     // Save a list of appointments to a file
