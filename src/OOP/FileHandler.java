@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class FileHandler {
 
     // Save Doctors to File
-    public static void saveDoctors(ArrayList<Doctor> doctorList) {
+    public static void  saveDoctors(ArrayList<Doctor> doctorList) {
         try (FileWriter writer = new FileWriter("doctors.txt")) {
             for (Doctor doctor : doctorList) {
                 writer.write(doctor.toString() + "\n");
