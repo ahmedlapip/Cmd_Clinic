@@ -1,36 +1,19 @@
 package OOP;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 
 public class Main{
-    static ArrayList<Doctor> doctorList;
-    static ArrayList<Patient> patientList;
-    static ArrayList<Receptionist> receptionistList;
-    static ArrayList<Appointment> appointmentList;
-static SignUp signUp = new SignUp();
+    static ArrayList<Doctor> doctorList = new ArrayList<>();
+    static ArrayList<Patient> patientList= new ArrayList<>();
+    static ArrayList<Receptionist> receptionistList= new ArrayList<>();
+    static ArrayList<Appointment> appointmentList= new ArrayList<>();
+    static Dental_clinic dental_clinic= new Dental_clinic();
     public static void main(String[] args) throws IOException {
 
-        doctorList = FileHandler.loadDoctors();
-        patientList = FileHandler.loadPatients();
-        receptionistList = FileHandler.loadReceptionists();
-        appointmentList=FileHandler.loadAppointments();
-        signUp.signUp(patientList,doctorList,receptionistList,appointmentList);
-
-FileHandler.saveDoctors(doctorList);
-FileHandler.savePatients(patientList);
-FileHandler.saveReceptionists(receptionistList);
-FileHandler.saveAppointments(appointmentList);
-
-
-
-
-
-
+    FileHandler.loadEntity(doctorList,patientList,receptionistList,appointmentList);
+    dental_clinic.showMenu(doctorList,patientList,receptionistList,appointmentList);
+    FileHandler.saveEntity(doctorList,patientList,receptionistList,appointmentList);
 
     }
 }

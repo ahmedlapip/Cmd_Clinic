@@ -1,6 +1,8 @@
 package OOP;
 
 
+import java.util.Scanner;
+
 public  class User {
     private String firstName;
     private String lastName;
@@ -8,6 +10,7 @@ public  class User {
     private String email;
     protected String password;
     private String mobileNumber;
+    private final Scanner scanner = new Scanner(System.in);
 
     public User(String firstName, String lastName, String username, String email, String password, String mobileNumber) {
         this.firstName = firstName;
@@ -82,4 +85,32 @@ public  class User {
     protected String getName() {
         return firstName + " " + lastName;
     }
+
+    protected String input(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
+    }
+
+    protected int inputInt(String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextInt()) {
+            System.out.print("Invalid input. Please enter a number: ");
+            scanner.next();
+        }
+        int value = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        return value;
+    }
+
+    protected float inputFloat(String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextFloat()) {
+            System.out.print("Invalid input. Please enter a valid number: ");
+            scanner.next();
+        }
+        float value = scanner.nextFloat();
+        scanner.nextLine(); // Consume newline
+        return value;
+    }
+
 }

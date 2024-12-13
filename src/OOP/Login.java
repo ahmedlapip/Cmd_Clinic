@@ -1,9 +1,9 @@
 package OOP;
-
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Login {
+public class Login extends User {
     private final Scanner scanner = new Scanner(System.in);
 
     public void out(Patient[] patients) {
@@ -14,10 +14,12 @@ public class Login {
     }
 
     // Validate Doctor's login credentials
-    public void validateDoctor(String username, String password, ArrayList<Doctor> doctors) {
-        for (Doctor doctor : doctors) {
+    public void validateDoctor(String username, String password, ArrayList<Appointment> appointmentList,
+                               ArrayList<Receptionist> receptionistList, ArrayList<Patient>patientList,ArrayList<Doctor>doctorList) {
+        for (Doctor doctor : doctorList) {
             if (doctor.getUsername().equals(username) && doctor.getPassword().equals(password)) {
                System.out.println("Doctor logged in successfully!");
+                doctor.doctorMenu(appointmentList,receptionistList, patientList,doctorList);
                 return ;
             }
             else {
@@ -28,11 +30,8 @@ public class Login {
     }
 
     // Validate Patient's login credentials
-    public void validatePatient( ArrayList<Patient> patients,ArrayList<Doctor> doctors,ArrayList<Appointment> appointmentList) {
-        System.out.println("Enter username: ");
-        String username = scanner.nextLine().trim();
-        System.out.println("Enter password: ");
-        String password = scanner.nextLine().trim();
+    public void validatePatient(String username, String password , ArrayList<Patient> patients
+            ,ArrayList<Doctor> doctors,ArrayList<Appointment> appointmentList) {
         for (Patient patient : patients) {
             if (patient.getUsername().equals(username) && patient.getPassword().equals(password)) {
                 System.out.println("Patient logged in successfully!");
@@ -47,10 +46,12 @@ public class Login {
     }
 
     // Validate Receptionist's login credentials
-    public void validateReceptionist(String username, String password, ArrayList<Receptionist> receptionists) {
+    public void validateReceptionist(String username, String password, ArrayList<Receptionist> receptionists,
+                                     ArrayList<Appointment> appointmentList) {
         for (Receptionist receptionist : receptionists) {
             if (receptionist.getUsername().equals(username) && receptionist.getPassword().equals(password)) {
                System.out.println("Receptionist logged in successfully!");
+               receptionist.receptionistMenu(appointmentList);
                 return;
             }
             else {
@@ -60,40 +61,39 @@ public class Login {
 
     }
 
-    public void logIn(ArrayList<Doctor> doctors, ArrayList<Patient> patients, ArrayList<Receptionist> receptionists,ArrayList<Appointment> appointmentList) {
+    public void logIn(ArrayList<Doctor> doctors, ArrayList<Patient> patients,
+                      ArrayList<Receptionist> receptionists,ArrayList<Appointment> appointmentList) {
+        System.out.println("===========================");
         System.out.println("[1] Login As A Doctor \n[2] Login As A Patient \n[3] Login As A Receptionist");
-        System.out.print("Choose login type: ");
+        System.out.println("===========================");
 
         // Ensure valid numeric choice
-        int choice = getValidIntegerInput();
-        scanner.nextLine(); // Consume newline
+        boolean Fault_log = false;
+        do {
+        int choice = inputInt("Enter your choice: ");
 
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine().trim();
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine().trim();
+        String username =input("Enter username: ");
+
+        String password = input("Enter password: ");
 
         switch (choice) {
             case 1 -> {
-             validateDoctor(username, password, doctors);
+             validateDoctor(username, password, appointmentList, receptionists, patients, doctors);
             }
             case 2 -> {
-                validatePatient( patients,doctors,appointmentList);
+                validatePatient(username,password,patients,doctors,appointmentList);
 
             }
             case 3 -> {
-               validateReceptionist(username, password, receptionists);
+               validateReceptionist(username, password, receptionists, appointmentList);
 
             }
-            default -> System.out.println("Invalid choice. Please select between 1, 2, or 3.");
-        }
+            default -> {
+                System.out.println("Invalid choice. Please select between 1, 2, or 3.");
+                Fault_log=true;
+            }
+        }}while(Fault_log);
     }
 
-    private int getValidIntegerInput() {
-        while (!scanner.hasNextInt()) {
-            System.out.print("Invalid input. Please enter a valid number: ");
-            scanner.next();
-        }
-        return scanner.nextInt();
-    }
+
 }
