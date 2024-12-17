@@ -1,16 +1,21 @@
 package OOP;
 
 
+import java.io.Console;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public  class User {
-    private String firstName;
-    private String lastName;
+public abstract class User {
+    protected String firstName;
+    protected String lastName;
     protected String username;
     private String email;
     protected String password;
     private String mobileNumber;
-    private final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     public User(String firstName, String lastName, String username, String email, String password, String mobileNumber) {
         this.firstName = firstName;
@@ -87,30 +92,94 @@ public  class User {
     }
 
     protected String input(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine();
+        String userInput = null;
+        while (userInput == null) { // Keep prompting until valid input is provided
+            try {
+                System.out.print(prompt);
+                userInput = scanner.nextLine(); // Get input from the user
+                if (userInput.trim().isEmpty()) { // Check for empty input
+                    throw new IllegalArgumentException("Input cannot be empty. Please try again.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage()); // Print error message
+                userInput = null; // Reset input to retry
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred. Please try again.");
+                userInput = null; // Reset input to retry
+            }
+        }
+        return userInput;
     }
 
+
     protected int inputInt(String prompt) {
-        System.out.print(prompt);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Invalid input. Please enter a number: ");
-            scanner.next();
+        int value = 0;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                System.out.print(prompt);
+                value = Integer.parseInt(scanner.nextLine()); // Read input and parse it
+                valid = true; // Exit loop if parsing succeeds
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred. Please try again.");
+            }
         }
-        int value = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
         return value;
     }
 
     protected float inputFloat(String prompt) {
-        System.out.print(prompt);
-        while (!scanner.hasNextFloat()) {
-            System.out.print("Invalid input. Please enter a valid number: ");
-            scanner.next();
+        float value = 0;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                System.out.print(prompt);
+                value = Float.parseFloat(scanner.nextLine()); // Parse input as float
+                valid = true; // Exit loop if valid float input
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid floating-point number.");
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred. Please try again.");
+            }
         }
-        float value = scanner.nextFloat();
-        scanner.nextLine(); // Consume newline
         return value;
     }
+    public static LocalDate inputDate(String prompt) {
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = null;
+
+        while (date == null) {
+            System.out.println(prompt);
+            String input = scanner.nextLine();
+            try {
+                date = LocalDate.parse(input, formatter); // Parse the input
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+            }
+        }
+
+        return date;
+    }
+    public static LocalTime inputTime(String prompt) {
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime time = null;
+
+        while (time == null) {
+            System.out.println(prompt);
+            String input = scanner.nextLine();
+            try {
+                time = LocalTime.parse(input, timeFormatter); // Parse the input
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid time format. Please use HH:mm.");
+            }
+        }
+
+        return time;
+    }
+
+
 
 }

@@ -115,6 +115,7 @@ public class Dental_clinic extends SignUp {
                 case 4:
                     System.out.println("Thank you for visiting Smile Craft Dental Clinic!");
                     running = false;
+                    FileHandler.saveEntity(doctorList,patientList,receptionistList,appointmentList);
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");

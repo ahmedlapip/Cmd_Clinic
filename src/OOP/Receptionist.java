@@ -1,5 +1,7 @@
 package OOP;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,8 +12,8 @@ public class Receptionist extends User {
     private final Scanner sc = new Scanner(System.in);
 
     // Constructors
-    public Receptionist() {}
 
+public Receptionist() {}
     public Receptionist(String firstName, String lastName, String username, String email, String password,
                         String mobileNumber, String gender, int age) {
         super(firstName, lastName, username, email, password, mobileNumber);
@@ -41,18 +43,19 @@ public class Receptionist extends User {
         System.out.println("Appointments:");
         System.out.println("=====================================================================================================");
         for (Appointment appointment : appointmentList) {
-            System.out.println("Patient Name: " + appointment.getPatientName() + ", Patient Mobile Number: " + appointment.getPhoneNumber()
-            + ", Date: " + appointment.getDate() + ", Time: " + appointment.getTime() + "\n" + "Doctor Name: " + appointment.getDoctorName()
+            System.out.println("Patient Name: " + appointment.getPatient_U_Name() + ", Patient Mobile Number: " + appointment.getPhoneNumber()
+            + ", Date: " + appointment.getDate() + ", Time: " + appointment.getTime() + "\n" + "Doctor Name: " + appointment.getDoctor_U_Name()
             + ", Doctor Mobile Number: " + appointment.getDoctorNum() + ", Available : " + appointment.getAppointed());
             System.out.println("=====================================================================================================");
         }
     }
 
     // Add Appointment
-    public void ReserveAppointment(ArrayList<Appointment> appointmentList) {
-        String patientName = input("Enter Patient Name: ");
+    public void ReserveAppointment(ArrayList<Appointment> appointmentList,ArrayList<Patient>patientList) {
+        String patientName = input("Enter Your User Name: ");
+        for(Patient patient : patientList) {
         for (Appointment appointment : appointmentList) {
-            if (appointment.getPatientName().equals(patientName)) {
+            if (appointment.getPatient_U_Name().equals(patientName)) {
                 appointment.setAppointed("true");
                 System.out.println("The Appointment Reserved Successfully.");
                 return;
@@ -60,16 +63,17 @@ public class Receptionist extends User {
                 System.out.println("There IS No Appointments With This Name.");
             }
         }
+        }
     }
 
     // Cancel Appointment
     public void cancelAppointment(ArrayList<Appointment> appointmentList) {
-        String Name = input("Enter Patient Name: ");
-        String date = input("Enter date (DD-MM-YYYY): ");
-        String time = input("Enter time (HH:MM): ");
+        String Name = input("Enter Patient User Name: ");
+        LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
+        LocalTime time = inputTime("Enter time (HH:MM): ");
 
         for (Appointment appointment : appointmentList) {
-            if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getPatientName().equals(Name)) {
+            if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getPatient_U_Name().equals(Name)) {
                 appointmentList.remove(appointment);
                 System.out.println("Appointment on " + date + " at " + time + " For Patient " + Name + " has been canceled.");
                 return;
@@ -79,7 +83,7 @@ public class Receptionist extends User {
     }
 
     // Interactive Menu for Receptionist
-    public void receptionistMenu(ArrayList<Appointment> appointmentList) {
+    public void receptionistMenu(ArrayList<Appointment> appointmentList,ArrayList<Patient>patientList) {
         boolean flag = false;
         do{
         int choice = inputInt("""
@@ -90,7 +94,7 @@ public class Receptionist extends User {
         3 -> Update Information
         ========================""");
         switch (choice) {
-            case 1 -> ReserveAppointment(appointmentList);
+            case 1 -> ReserveAppointment(appointmentList,patientList);
             case 2 -> cancelAppointment(appointmentList);
             case 3 -> updateInfo();
             default -> {
@@ -99,6 +103,7 @@ public class Receptionist extends User {
             }
         }}while(flag);
     }
+
 
     @Override
     public String toString() {

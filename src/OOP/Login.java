@@ -1,5 +1,4 @@
 package OOP;
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,10 +21,11 @@ public class Login extends User {
                 doctor.doctorMenu(appointmentList,receptionistList, patientList,doctorList);
                 return ;
             }
-            else {
-                System.out.println("Invalid credentials. Please check your username and password for Doctor login.");
-            }
+
         }
+
+            System.out.println("Invalid credentials. Please check your username and password for Doctor login.");
+
 
     }
 
@@ -47,11 +47,11 @@ public class Login extends User {
 
     // Validate Receptionist's login credentials
     public void validateReceptionist(String username, String password, ArrayList<Receptionist> receptionists,
-                                     ArrayList<Appointment> appointmentList) {
+                                     ArrayList<Appointment> appointmentList,ArrayList<Patient> patientList) {
         for (Receptionist receptionist : receptionists) {
             if (receptionist.getUsername().equals(username) && receptionist.getPassword().equals(password)) {
                System.out.println("Receptionist logged in successfully!");
-               receptionist.receptionistMenu(appointmentList);
+               receptionist.receptionistMenu(appointmentList,patientList);
                 return;
             }
             else {
@@ -74,7 +74,7 @@ public class Login extends User {
 
         String username =input("Enter username: ");
 
-        String password = input("Enter password: ");
+        String password = inputPassword("Enter Password: ");
 
         switch (choice) {
             case 1 -> {
@@ -85,7 +85,7 @@ public class Login extends User {
 
             }
             case 3 -> {
-               validateReceptionist(username, password, receptionists, appointmentList);
+               validateReceptionist(username, password, receptionists, appointmentList,patients);
 
             }
             default -> {

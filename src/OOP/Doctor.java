@@ -1,6 +1,7 @@
 package OOP;
 
-import java.sql.SQLOutput;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,16 +21,17 @@ public class Doctor extends User {
         super(firstName, lastName, username, email, password, mobileNumber);
         this.specialization = specialization;
     }
-    public void ReserveAppointment(ArrayList<Appointment> appointmentList) {
-        String date=input("Enter date (YYYY-MM-DD): ");
-        String time = input("Enter time (HH:MM): ");
+    public void SetAvailableDays(ArrayList<Appointment> appointmentList) {
+        LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
+        LocalTime time = inputTime("Enter time (HH:MM): ");
         for (Appointment appointment : appointmentList) {
+            //System.out.println("helpppppppppppppppppppppppppppppppppppp");
             if (appointment.getDate().equals(date) && appointment.getTime().equals(time)) {
                 System.out.println("An appointment on " + date + " at " + time + " already exists.");
                 return;
             }
             else {
-                Appointment newAppointment = new Appointment("empty","empty",date,time,this.getName(),this.getMobileNumber(),"false");
+                Appointment newAppointment = new Appointment("empty","empty",date,time,this.username,this.getMobileNumber(),"false");
                 appointmentList.add(newAppointment);
                 System.out.println("Appointment reserved for " + date + " at " + time);
                 return;
@@ -37,10 +39,16 @@ public class Doctor extends User {
         }
     }
 
+    public void PrescriptionForPatient(){
+
+
+
+    }
+
     // Show Available Days
     public void ShowForDay(ArrayList<Appointment> appointmentList) {
         for (Appointment appointment : appointmentList) {
-            if(appointment.getDate().equals(input("Enter date (YYYY-MM-DD): ")) && appointment.getAppointed().equals("true")) {
+            if(appointment.getDate().equals(inputDate("Enter date(yyyy-MM-dd)")) && appointment.getAppointed().equals("true")) {
                 System.out.println("You Have Appiontment At "+appointment.getTime());
             }
         }
@@ -50,7 +58,7 @@ public class Doctor extends User {
     //Change Availability
     public void changeAvailability(ArrayList<Appointment> appointmentList) {
         for (Appointment appointment : appointmentList) {
-            if(appointment.getDate().equals(input("Enter date (YYYY-MM-DD): ")) && appointment.getAppointed().equals("true"))
+            if(appointment.getDate().equals(inputDate("Enter date(yyyy-MM-dd)")) && appointment.getAppointed().equals("true"))
             {
                 System.out.println("Inform Receptionist to update Patient time");
                 appointmentList.remove(appointment);
@@ -77,7 +85,7 @@ boolean For_menu=false;
 do{
         int choice = inputInt("""
             Choose an option:
-            1 -> Reserve Appointment
+            1 -> Set Available Days and Hours
             2 -> Change Available Day
             3 -> Show Available Days
             4 -> Get Contact Information of the receptionist
@@ -85,7 +93,7 @@ do{
         """);
 
         switch (choice) {
-            case 1 -> ReserveAppointment(appointmentList);
+            case 1 -> SetAvailableDays(appointmentList);
             case 2 -> changeAvailability(appointmentList);
             case 3 -> ShowForDay(appointmentList);
             case 4 -> getInfoAboutReceptionist(receptionistList);
@@ -109,12 +117,13 @@ do{
     public void getInfoAboutPatient(ArrayList<Patient>patientList,ArrayList<Doctor>doctorList,ArrayList<Appointment>appointmentList){
         for(Appointment appointmet:appointmentList){
             for(Patient patient:patientList){
-                if(appointmet.getDoctorName().equals(getName()) && appointmet.getPhoneNumber().equals(getMobileNumber()) && appointmet.getAppointed().equals("true")&&appointmet.getPatientName().equals(patient.getName())){
+                if(appointmet.getPatient_U_Name().equals(patient.username) && appointmet.getAppointed().equals("true")&& appointmet.getDoctor_U_Name().equals(this.username)&&appointmet.getDate().equals(LocalDate.now())){
                     System.out.println(" Patient Name :"+patient.getName()+"\nPatient Phone Number :"+patient.getMobileNumber()
                             +"Patient Blood Type"+patient.getBloodType()
                             +"\nPatient Weight"+patient.getWeight()
                             +"\nPatient Height"+patient.getHeight()
-                            +"\nPaience History"+patient.getPatientHistory());
+                            +"\nPaience History"+patient.getPatientHistory()
+                    );
                 }
             }
         }
