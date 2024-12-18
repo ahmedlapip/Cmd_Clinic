@@ -68,7 +68,7 @@ public class Login extends User {
             pause(1000);
             clear();
             String username = input("Enter username: ");
-            String password = input("Enter Password: ");
+            String password = inputPassword("Password: ");
             switch (choice) {
                 case 1 ->
                         validateDoctor(username, password, appointmentList, receptionists, patients, doctors, prescriptionList);

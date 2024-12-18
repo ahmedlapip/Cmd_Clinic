@@ -1,5 +1,6 @@
 package com.project.zeft;
 
+import java.io.Console;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -81,7 +82,7 @@ public abstract class User {
         return date;
     }
 
-    public static LocalTime inputTime(String prompt,LocalDate date) {
+    public static LocalTime inputTime(String prompt, LocalDate date) {
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime time = null;
@@ -277,6 +278,7 @@ public abstract class User {
             e.printStackTrace();
         }
     }
+
     public void pause(int num) {
         try {
             // For Windows
@@ -292,6 +294,7 @@ public abstract class User {
             e.printStackTrace();
         }
     }
+
     protected char inputChar(String prompt) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -312,5 +315,18 @@ public abstract class User {
     }
 
 
+    public static String inputPassword(String prompt) {
+        Console console = System.console();
+        if (console == null) {
+            throw new IllegalStateException("No console available");
+        }
+
+        // Display the prompt and read the password securely
+        char[] passwordChars = console.readPassword(prompt);
+        if (passwordChars == null) {
+            return "";
+        }
+        return new String(passwordChars);
+    }
 
 }

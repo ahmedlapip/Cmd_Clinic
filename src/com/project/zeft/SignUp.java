@@ -53,7 +53,8 @@ class SignUp extends Login {
         String lastname = input("Last Name: ");
         String username = input("Username: ");
         String email = inputEmail("Email: ");
-        String password = input("Password: ");
+        String password = inputPassword("Password: ");
+        System.out.println(password);
         String mobileNumber = setMobileNumber("Mobile number: ");
         for (Doctor d : doctors) {
             if (d.getMobileNumber().equals(mobileNumber)) {
@@ -77,7 +78,7 @@ class SignUp extends Login {
         String lastname = input("Last Name: ");
         String username = input("Username: ");
         String email = inputEmail("Email: ");
-        String password = input("Password: ");
+        String password = inputPassword("Password: ");
         String mobileNumber = setMobileNumber("Mobile number: ");
         String patientHistory = input("Patient History: ");
         String bloodType = Patient.setBloodType("Blood Type: ");
@@ -99,7 +100,7 @@ class SignUp extends Login {
         String lastname = input("Last Name: ");
         String username = input("Username: ");
         String email = inputEmail("Email: ");
-        String password = input("Password: ");
+        String password = inputPassword("Password: ");
         String mobileNumber = setMobileNumber("Mobile number: ");
         String gender = setGender("Gender: ");
         int age = getAge();

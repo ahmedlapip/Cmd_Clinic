@@ -18,6 +18,14 @@ public class Prescription {
         this.Prescription_Date = Date;
     }
 
+    public String getOther_Notes() {
+        return Other_Notes;
+    }
+
+    public LocalDate getPrescription_Date() {
+        return Prescription_Date;
+    }
+
     public int getDosage() {
 
         return dosage;

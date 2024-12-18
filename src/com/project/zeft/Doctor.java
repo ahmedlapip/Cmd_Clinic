@@ -49,7 +49,7 @@ public class Doctor extends User {
         clear();
         boolean s = false;
         for (Appointment appointment : appointmentList) {
-            if (appointment.getAppointed().equals("true") && appointment.getDate().equals(LocalDate.now())) {
+            if (appointment.getAppointed().equals("true") && appointment.getDate().equals(LocalDate.now()) && appointment.getTime().isBefore(LocalTime.now())) {
                 String Med = input("Enter medicine for the patient: ");
                 int dosage = inputInt("Enter number of repetitions: ");
                 String notes = input("Enter notes: ");
@@ -58,12 +58,9 @@ public class Doctor extends User {
                 prescriptionList.add(prescription);
                 s = true;
             }
-
         }
-        if (!s)
-            System.out.println("No patients today ");
-        pause(1000);
-        clear();
+        if (!s) System.out.println("No patients today ");
+
     }
 
     public void ShowForDay(ArrayList<Appointment> appointmentList) {
@@ -77,8 +74,7 @@ public class Doctor extends User {
                 f = true;
             }
         }
-        if (!f)
-            System.out.println("You Have No Appointment At " + date);
+        if (!f) System.out.println("You Have No Appointment At " + date);
         pause(1000);
         clear();
     }
@@ -98,9 +94,7 @@ public class Doctor extends User {
 
                 ArrayList<Appointment> toRemove = new ArrayList<>();
                 for (Appointment appointment : appointmentList) {
-                    if (appointment.getDate().equals(date)
-                            && appointment.getAppointed().equals("false")
-                            && appointment.getDoctorUserName().equals(username)) {
+                    if (appointment.getDate().equals(date) && appointment.getAppointed().equals("false") && appointment.getDoctorUserName().equals(username)) {
                         toRemove.add(appointment);
                     }
                 }
@@ -115,8 +109,8 @@ public class Doctor extends User {
                 f = true;
             }
         } while (f);
-        pause(7000);
-        clear();
+        pause(4000);
+
     }
 
     public String toString() {
@@ -129,12 +123,11 @@ public class Doctor extends User {
         return new Doctor(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]);
     }
 
-    public void doctorMenu(ArrayList<Appointment> appointmentList, ArrayList<Receptionist> receptionistList,
-                           ArrayList<Patient> patientList, ArrayList<Prescription> prescriptionList) {
+    public void doctorMenu(ArrayList<Appointment> appointmentList, ArrayList<Receptionist> receptionistList, ArrayList<Patient> patientList, ArrayList<Prescription> prescriptionList) {
         do {
             pause(1000);
             clear();
-            int choice = inputInt("\n[1] Set Available Days and Hours \n[2] Change Available Day \n[3] Show Your Appointments for Specific day \n[4] Get Contact Information of the receptionist \n[5] Get patient information \n[6] Write Prescription For the Patient \n[0] Back\n");
+            int choice = inputInt("\n[1] Set Available Days and Hours " + "\n[2] Change Available Day" + " \n[3] Show Your Appointments for Specific day " + "\n[4] Get Contact Information of the Receptionists" + " \n[5] Get patient information" + " \n[6] Write Prescription For the Patient" + " \n[0] Back\n");
             switch (choice) {
                 case 0 -> {
                     return;
@@ -157,13 +150,10 @@ public class Doctor extends User {
         boolean f = false;
         for (Receptionist receptionist : receptionistList) {
             System.out.println("==============================================");
-            System.out.println("Receptionist " + i + " Name : " + receptionist.getName()
-                    + "\nReceptionist " + i + " Phone Number : " + receptionist.getMobileNumber());
+            System.out.println("Receptionist " + i + " Name : " + receptionist.getName() + "\nReceptionist " + i + " Phone Number : " + receptionist.getMobileNumber());
             f = true;
-            break;
         }
-        if (!f)
-            System.out.println("No receptionists found");
+        if (!f) System.out.println("No receptionists found");
         System.out.println("==============================================");
 
     }
@@ -178,8 +168,7 @@ public class Doctor extends User {
                 menu = true;
             }
         }
-        if (!menu)
-            System.out.println("there Is No Appointments");
+        if (!menu) System.out.println("there Is No Appointments");
     }
 
     public void getInfoAboutPatient(ArrayList<Patient> patientList, ArrayList<Appointment> appointmentList) {
@@ -191,18 +180,12 @@ public class Doctor extends User {
                 if (appointment.getDate().equals(LocalDate.now()) && appointment.getPatientUserName().equals(patient.username) && appointment.getAppointed().equals("true") && appointment.getDoctorUserName().equals(this.username)) {
 
                     System.out.println("====================================");
-                    System.out.println("Patient Name: " + patient.getName()
-                            + "\nPatient Phone Number: " + patient.getMobileNumber()
-                            + "\nPatient Blood Type: " + patient.getBloodType()
-                            + "\nPatient Weight: " + patient.getWeight()
-                            + "\nPatient Height: " + patient.getHeight()
-                            + "\nPatient History: " + patient.getPatientHistory());
+                    System.out.println("Patient Name: " + patient.getName() + "\nPatient Phone Number: " + patient.getMobileNumber() + "\nPatient Blood Type: " + patient.getBloodType() + "\nPatient Weight: " + patient.getWeight() + "\nPatient Height: " + patient.getHeight() + "\nPatient History: " + patient.getPatientHistory());
                     found = true;
                 }
             }
         }
-        if (!found)
-            System.out.println("No patient found");
+        if (!found) System.out.println("No patient found");
         System.out.println("====================================");
 
     }

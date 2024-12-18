@@ -10,7 +10,8 @@ public class Patient extends User {
     protected float weight;
     protected float height;
     static Scanner sc = new Scanner(System.in);
-//12
+
+    //12
     //,not,Male,O+,19,60.0,170.0
     public Patient(String firstName, String lastName, String username, String email, String password, String mobileNumber, int age, String gender, String bloodType, String patientHistory, float weight, float height) {
         super(firstName, lastName, username, email, password, mobileNumber);
@@ -45,7 +46,7 @@ public class Patient extends User {
         clear();
         showAvailableAppointments(appointmentList);
         LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
-        LocalTime time = inputTime("Enter time (HH:MM): ",date);
+        LocalTime time = inputTime("Enter time (HH:MM): ", date);
         for (Appointment appointment : appointmentList) {
 
             if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getAppointed().equals("false")) {
@@ -65,19 +66,20 @@ public class Patient extends User {
         boolean bool = false;
         for (Prescription prescription : prescriptionList) {
             if (prescription.getUserName().equals(this.username)) {
-                System.out.println("You Have Medicine " + prescription.getMedicine_Name() + "that You Have to take " + prescription.getDosage() + " Daily");
+                System.out.println("You Have Medicine " + prescription.getMedicine_Name() + " that You Have to take " + prescription.getDosage() + " Daily and Doctor notes is " + prescription.getOther_Notes());
                 bool = true;
             }
         }
         if (!bool)
             System.out.println("You Have No Prescription ");
+        pause(5000);
     }
 
     public void cancelReservation(ArrayList<Appointment> appointmentList) {
         pause(1000);
         clear();
         LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
-        LocalTime time = inputTime("Enter time (HH:MM): ",date);
+        LocalTime time = inputTime("Enter time (HH:MM): ", date);
         for (Appointment appointment : appointmentList) {
             if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getPhoneNumber().equals(getMobileNumber())) {
                 appointment.setAppointed("false");
@@ -126,7 +128,8 @@ public class Patient extends User {
         if (!bool)
             System.out.println("No doctor found.");
     }
-//age, String gender, String bloodType, String patientHistory, float weight, float height
+
+    //age, String gender, String bloodType, String patientHistory, float weight, float height
     public String toString() {
         return super.toString() + "," + age + "," + gender + "," + bloodType + "," + patientHistory + "," + weight + "," + height;
     }
@@ -161,7 +164,7 @@ public class Patient extends User {
         boolean bool = false;
         for (Appointment appointment : appointmentList) {
             if (appointment.getAppointed().equals("false")) {
-                System.out.println("There is an appointments on " + appointment.getDate() + " at " + appointment.getTime() + "with dr." + appointment.getDoctorUserName());
+                System.out.println("There is an appointments on " + appointment.getDate() + " at " + appointment.getTime() + " with dr." + appointment.getDoctorUserName());
                 bool = true;
             }
         }
