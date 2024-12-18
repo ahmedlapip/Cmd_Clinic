@@ -1,34 +1,17 @@
 package com.project.zeft;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
-
 public class Patient extends User {
-protected String patientHistory, age, gender, bloodType;
-protected float weight=0;
-protected float height=0;
-Scanner sc = new Scanner(System.in);
-ArrayList<Appointment> appointmentList = new ArrayList<>();
-/* Reserve an appointment with specific date and time. ● Cancel reservation. ● Check prices for appointments. ● Search for doctor with name or mobile number ● Display available appointments for reservation*/
-public Patient() {}
+    protected String patientHistory, gender, bloodType;
+    protected float weight;
+    protected float height;
+    static Scanner sc = new Scanner(System.in);
 
-    ///login
-    public Patient (String userName,String password ){
-        super(userName,password);
-
-    }
-
-    ///basic info
-    public Patient(String firstName, String lastName, String username, String email, String password, String mobileNumber){
-
-    super(firstName, lastName, username, email, password, mobileNumber);
-   }
-
-    ///full info
-    public Patient(String firstName, String lastName, String username, String email, String password, String mobileNumber, String age, String gender,String bloodType,String patientHistory, float weight, float height){
-
+    public Patient(String firstName, String lastName, String username, String email, String password, String mobileNumber, int age, String gender, String bloodType, String patientHistory, float weight, float height) {
         super(firstName, lastName, username, email, password, mobileNumber);
         this.age = age;
         this.gender = gender;
@@ -38,154 +21,240 @@ public Patient() {}
         this.patientHistory = patientHistory;
     }
 
-    public void change (){
-        System.out.println("What do you want to change? Email   Mobile Number   Weight  Height ");
-        String choice = sc.nextLine();
+    public void updateInfo() {
+        boolean bool = false;
+        do {
+            int choice = inputInt("What do you want to change? \n[1]Email \n[2]Mobile Number \n[3]Weight \n[4] Height) : ");
+            switch (choice) {
+                case 1 -> setEmail(inputEmail("Enter new email: "));
+                case 2 -> setMobileNumber("Mobile number");
+                case 3 -> setWeight();
+                case 4 -> setHeight();
+                default -> {
+                    System.out.println("Invalid choice .choose 1 or 2 or 3 or 4");
+                    bool = true;
+                }
+            }
+        } while (bool);
+        System.out.println("Updated Successfully");
+    }
 
-        switch (choice) {
-            case "Email" -> {
-                System.out.println("Enter new email");
-                String newEmail = sc.nextLine();
-                setEmail(newEmail);
-            }
-            case "Mobile Number" -> {
-                System.out.println("Enter new mobile number");
-                String newMobileNumber = sc.nextLine();
-                setMobileNumber(newMobileNumber);
-            }
-            case "Weight" -> {
-                System.out.println("Enter new weight");
-                float newWeight = sc.nextFloat();
-                setWeight(newWeight);
-            }
-            case "Height" -> {
-                System.out.println("Enter new height");
-                float newHeight = sc.nextFloat();
-                setHeight(newHeight);
-            }
-            default -> {
-                System.out.println("Invalid choice");
+    public void reserveAppointment(ArrayList<Appointment> appointmentList) {
+        showAvailableAppointments(appointmentList);
+        LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
+        LocalTime time = inputTime("Enter time (HH:MM): ");
+        for (Appointment appointment : appointmentList) {
+
+            if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getAppointed().equals("false")) {
+                appointment.setPatientUserName(this.username);
+                appointment.setPhoneNumber(super.getMobileNumber());
+                appointment.setAppointed("true");
+                System.out.println("Appointment reserved for " + date + " at " + time + " with dr." + appointment.getDoctorUserName());
+                return;
             }
         }
+        System.out.println("You Cannot Appointment on " + date + " at " + time + " already exists.");
     }
-    public void reserveAppointment(String date, String time){
-        System.out.println("Enter date and time for appointment");
-        date = sc.nextLine();
-        time = sc.nextLine();
-        Appointment newAppointment = new Appointment(this.getName(),this.getMobileNumber(),date,time);
-        appointmentList.add(newAppointment);
+
+    public void PrescriptionForPatient(ArrayList<Prescription> prescriptionList) {
+        boolean bool = false;
+        for (Prescription prescription : prescriptionList) {
+            if (prescription.getUserName().equals(this.username)) {
+                System.out.println("You Have Medicine " + prescription.getMedicine_Name() + "that You Have to take " + prescription.getDosage() + " Daily");
+                bool = true;
+            }
+        }
+        if (!bool)
+            System.out.println("You Have No Prescription ");
     }
-    public void cancelReservation(String date, String time){
-        System.out.println("Enter date and time to cancel appointment");
-        date = sc.nextLine();
-        time = sc.nextLine();
+
+    public void cancelReservation(ArrayList<Appointment> appointmentList) {
+        LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
+        LocalTime time = inputTime("Enter time (HH:MM): ");
         for (Appointment appointment : appointmentList) {
-            if (appointment.getDate().equals(date) && appointment.getTime().equals(time)) {
-                appointmentList.remove(appointment);
+            if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getPhoneNumber().equals(getMobileNumber())) {
+                appointment.setAppointed("false");
+                appointment.setPatientUserName(" ");
+                appointment.setPhoneNumber(" ");
+                System.out.println("Appointment on " + date + " at " + time + " has been canceled.");
                 return;
             }
         }
         System.out.println("No appointment found for " + date + " at " + time + ".");
-
-    }
-    public void checkPrices(){
-       System.out.println("you Have Appointments on ");
-        int cnt=0;
-       for (Appointment appointment : appointmentList) {
-           if(appointment.getPatientName().equals(this.getName())&& appointment.getPhoneNumber().equals(this.getMobileNumber()) && cnt > 0){
-            System.out.println(appointment.getDate() + " at " + appointment.getTime());
-            cnt++;
-           }
-          }
-       if(cnt>0) {
-            System.out.println("Total appointments: " + cnt + "appointment(s)  " + "total Price : " + cnt * Doctor.Price + "EGP");
-        }
-       else {
-           System.out.println("No appointments found");
-       }
     }
 
-    public void searchForDoctor(ArrayList<Doctor>doctorList){
-        System.out.println("Enter Name or Mobile Number to search for doctor");
-        String search = sc.nextLine();
-        for (Doctor doctor : doctorList) {
-            if (doctor.getName().equals(search) || doctor.getMobileNumber().equals(search)) {
-                System.out.println("Doctor found: " + doctor.getName());
-                return;
+    public void checkPrices(ArrayList<Appointment> appointmentList) {
+        boolean bool = false;
+        int count = 0;
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getPatientUserName().equals(this.getUsername())) {
+                count++;
+                bool = true;
             }
         }
-        System.out.println("No doctor found");
-    }
-    public void ShowAvailableAppointments(){
-
-    }
-
-    public String getAge() {
-        return age;
+        System.out.println("You have " + count + " appointment(s).");
+        System.out.println("Total price: " + count * Doctor.PRICE + " EGP");
+        if (!bool)
+            System.out.println("No appointments found.");
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void searchForDoctor(ArrayList<Doctor> doctorList) {
+        boolean bool = false;
+        String search = input("Enter doctor name or mobile number: ");
+        for (Doctor doctor : doctorList) {
+            if (doctor.getName().equalsIgnoreCase(search) || doctor.getMobileNumber().equals(search)) {
+                System.out.println("Doctor found");
+                System.out.println("======================================");
+                System.out.println("Doctor Name: " + doctor.getName());
+                System.out.println("Doctor Mobile Number: " + doctor.getMobileNumber());
+                System.out.println("Doctor Email: " + doctor.getEmail());
+                System.out.println("======================================");
+                bool = true;
+            }
+        }
+        if (!bool)
+            System.out.println("No doctor found.");
+    }
+
+    public String toString() {
+        return super.toString() + "," + patientHistory + "," + bloodType + "," + gender + "," + age + "," + weight + "," + height;
+    }
+
+    public static Patient fromString(String data) {
+        String[] parts = data.split(",");
+
+        int age = 0;
+        try {
+            age = Integer.parseInt(parts[6]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid age value: " + parts[6] + ". Setting default value (0).");
+        }
+
+        float weight = 0.0f;
+        try {
+            weight = Float.parseFloat(parts[10]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid weight value: " + parts[10] + ". Setting default value (0.0).");
+        }
+
+        float height = 0.0f;
+        try {
+            height = Float.parseFloat(parts[11]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid height value: " + parts[11] + ". Setting default value (0.0).");
+        }
+        return new Patient(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], age, parts[7], parts[8], parts[9], weight, height);
+    }
+
+    public void showAvailableAppointments(ArrayList<Appointment> appointmentList) {
+        boolean bool = false;
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getAppointed().equals("false")) {
+                System.out.println("There is an appointments on " + appointment.getDate() + " at " + appointment.getTime() + "with dr." + appointment.getDoctorUserName());
+                bool = true;
+            }
+        }
+        if (!bool)
+            System.out.println("there Is No Appointments");
+    }
+
+    public void showAvailableAppointments(ArrayList<Appointment> appointmentList, String s) {
+        boolean f = false;
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getPatientUserName().equals(this.username) && (appointment.getAppointed().equals(s))) {
+                System.out.println("There is an appointments on " + appointment.getDate() + " at " + appointment.getTime());
+                f = true;
+            }
+        }
+        if (!f)
+            System.out.println("there Is No Appointments");
     }
 
     public String getBloodType() {
+
         return bloodType;
     }
 
-    public void setBloodType(String bloodType) {
-        this.bloodType = bloodType;
+    protected static String setBloodType(String prompt) {
+        String bloodType = null;
+        while (bloodType == null) {
+            try {
+                System.out.print(prompt);
+                bloodType = sc.nextLine().trim().toUpperCase();
+
+                if (bloodType.isEmpty()) {
+                    throw new IllegalArgumentException("Input cannot be empty. Please try again.");
+                }
+
+                if (!bloodType.matches("^(A|B|AB|O)[+-]?$")) {
+                    throw new IllegalArgumentException("Invalid blood type. Please enter a valid blood type (e.g., A+, B-, AB+, O-).");
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                bloodType = null;
+            }
+        }
+        return bloodType;
     }
 
     public float getHeight() {
+
         return height;
     }
 
-    public void setHeight(float height) {
-        this.height = height;
+    public static float setHeight() {
+
+        do {
+            float height = inputFloat("Enter height(cm): ");
+            if (height > 50 && height <= 200)
+                return height;
+            else {
+                System.out.println("Invalid height, please try again");
+            }
+        } while (true);
     }
 
     public float getWeight() {
+
         return weight;
     }
 
-    public void setWeight(float weight) {
-        this.weight = weight;
+    public String getPatientHistory() {
+
+        return patientHistory;
     }
 
-    public void For_Menu(){
-        System.out.println("As Patient What to want to do : \n1-> Reserve Appointment\n2-> Cancel Reservation\n3-> Check Prices\n4-> Search for Doctor\n5-> Show Available Appointments ");
-        int choice = sc.nextInt();
-        switch (choice){
-            case 1 -> {
-                String date,time;
-                System.out.println("Enter date and time for appointment");
-                date = sc.nextLine();
-                time = sc.nextLine();
-               this.reserveAppointment(date,time);
+    public static float setWeight() {
+
+        do {
+            float weight = inputFloat("Enter weight(KG):");
+            if (weight > 10 && weight <= 300)
+                return weight;
+            else {
+                System.out.println("Invalid Weight, please try again");
             }
-            case 2 -> {
-                String date,time;
-                System.out.println("Enter date and time to cancel appointment");
-                date = sc.nextLine();
-                time = sc.nextLine();
-                this.cancelReservation(date,time);
-            }
-            case 3 -> {
-                this.checkPrices();
-            }
-            case 4 -> {
-                ArrayList<Doctor> doctorList = new ArrayList<>();
-                this.searchForDoctor(doctorList);
-            }
-            case 5 -> {
-                this.ShowAvailableAppointments();
-            }
-            default -> {
-                System.out.println("Invalid choice");
-            }
-        }
+        } while (true);
     }
 
+    public void patientMenu(ArrayList<Doctor> doctorList, ArrayList<Appointment> appointmentList, ArrayList<Prescription> prescriptionList) {
+        do {
+            int choice = inputInt("Choose an option:\n[1]  Reserve Appointment \n[2] Cancel Reservation \n[3] Check Prices \n[4] Search for Doctor \n[5] Show Your Appointments \n[6] Update Information \n[7] Show your Prescription \n[0] Back\n");
 
+            switch (choice) {
+                case 1 -> reserveAppointment(appointmentList);
+                case 2 -> cancelReservation(appointmentList);
+                case 3 -> checkPrices(appointmentList);
+                case 4 -> searchForDoctor(doctorList);
+                case 5 -> showAvailableAppointments(appointmentList, "true");
+                case 6 -> updateInfo();
+                case 7 -> PrescriptionForPatient(prescriptionList);
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid choice. Please try again.");
+            }
+        } while (true);
+    }
 
 }

@@ -1,239 +1,96 @@
-/*package com.project.zeft;
-
-
+package com.project.zeft;
 
 import java.io.*;
 import java.util.ArrayList;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+public class FileHandler {
 
-
-public  class FileHandler {
-    private static final String DOCTOR_INFO_FILE = "src/main/resources/doctorsinfo.txt";
-    private static final String PATIENT_INFO_FILE = "src/main/resources/patientsinfo.txt";
-    private static final String RECEPTIONIST_INFO_FILE = "src/main/resources/receptionistsinfo.txt";
-    private static final String FILE_NAME = "src/main/resources/records.txt";
-    Patient patient = new Patient();
-
-
-
-
-
-
-    public static void  saveRecord(int id ,String date, String time) {
-
-        try (FileWriter fileWriter = new FileWriter(FILE_NAME, true);
-             PrintWriter printWriter = new PrintWriter(fileWriter)) {
-
-            // Write data in the format ID \t Date \t Time
-            printWriter.printf("%s\t%s\t%s%n", id, date, time);
-
-            System.out.println("Record saved successfully!");
+    public static void saveEntity(ArrayList<Doctor> doctorList, ArrayList<Patient> patientList, ArrayList<Receptionist> receptionistList, ArrayList<Appointment> appointmentList, ArrayList<Prescription> prescriptions) {
+        try (FileWriter writer = new FileWriter("src/doctors.txt")) {
+            for (Doctor doctor : doctorList) {
+                writer.write(doctor.toString() + "\n");
+            }
+            System.out.println("Doctor data saved successfully.");
         } catch (IOException e) {
-            System.err.println("Error while writing to file: " + e.getMessage());
+            System.err.println("Error saving doctor data: " + e.getMessage());
         }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public static void writePatients(ArrayList<Patient> patientList) throws IOException {
-        File file = new File(PATIENT_INFO_FILE);
-        if (!file.exists()) {
-            System.out.println("the file dose not exist!");
-        }
-        else{
-            FileWriter fr = new FileWriter(PATIENT_INFO_FILE, true);
-            PrintWriter pr = new PrintWriter(fr);
-
+        try (FileWriter writer = new FileWriter("src/patients.txt")) {
             for (Patient patient : patientList) {
-                pr.println(patient.toString());
+                writer.write(patient.toString() + "\n");
             }
-            pr.close();
+            System.out.println("Patient data saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error saving patient data: " + e.getMessage());
         }
-    }
-    public static ArrayList<Patient> readPatients(ArrayList<Doctor> d) throws IOException {
-
-
-
-        ArrayList<Patient> patientList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(PATIENT_INFO_FILE));
-        String line;
-
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(",");
-            Patient patients = new Patient(
-                    parts[0], // firstName
-                    parts[1], // lastName
-                    parts[2], // username
-                    parts[3], // email
-                    parts[4], // password
-                    parts[5], // mobileNumber
-                    parts[6], // age
-                    parts[7], // gender
-                    Float.parseFloat(parts[8]), // weight
-                    Float.parseFloat(parts[9])  // height
-            );
-            patientList.add(patients);
-        }
-        br.close();
-        return patientList;
-    }
-    public static void writeReceptionist(ArrayList <Receptionist> receptionistsList) throws IOException {
-        File file = new File(RECEPTIONIST_INFO_FILE);
-        if (!file.exists()) {
-            System.out.println("the file dose not exist!");
-        }
-        else{
-            FileWriter fr = new FileWriter(RECEPTIONIST_INFO_FILE, true);
-            PrintWriter pr = new PrintWriter(fr);
-
-            for (Receptionist receptionist : receptionistsList) {
-                pr.println(receptionist.toString());
+        try (FileWriter writer = new FileWriter("src/receptionists.txt")) {
+            for (Receptionist receptionist : receptionistList) {
+                writer.write(receptionist.toString() + "\n");
             }
-            pr.close();
+            System.out.println("Receptionist data saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error saving receptionist data: " + e.getMessage());
         }
-    }
-    public static void writeDoctors(ArrayList<Doctor> doctorList) throws IOException {
-        File file = new File(DOCTOR_INFO_FILE);
-        if (!file.exists()) {
-            System.out.println("the file dose not exist!");
-        }
-        else {
-            try (FileWriter fr = new FileWriter(DOCTOR_INFO_FILE, true);
-                 PrintWriter pr = new PrintWriter(fr)) {
-                for (Doctor doctor : doctorList) {
-                    pr.println(doctor.toString());
-                }
+        try (FileWriter writer = new FileWriter("src/appointments.txt")) {
+            for (Appointment appointment : appointmentList) {
+                writer.write(appointment.toString() + "\n");
             }
+            System.out.println("Appointments saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error saving appointment data: " + e.getMessage());
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Prescriptions.txt"))) {
+            for (Prescription prescription : prescriptions) {
+                writer.write(prescription.toString());
+                writer.newLine();
+            }
+            System.out.println("Prescription data saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error saving prescription data: " + e.getMessage());
         }
     }
-    public static ArrayList<Doctor> readDoctors() throws IOException {
-        ArrayList <Doctor> doctorList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(DOCTOR_INFO_FILE));
-        String line;
 
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(",");
-            Doctor doctors = new Doctor(
-                    parts[0], // firstName
-                    parts[1], // lastName
-                    parts[2], // username
-                    parts[3], // email
-                    parts[4], // password
-                    parts[5], // mobileNumber
-                    parts[6]  // specialization
-            );
-            doctorList.add(doctors);
+    public static void loadEntity(ArrayList<Doctor> doctorList, ArrayList<Patient> patientList, ArrayList<Receptionist> receptionistList, ArrayList<Appointment> appointmentList, ArrayList<Prescription> prescriptions) {
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/doctors.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                doctorList.add(Doctor.fromString(line));
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading doctor data: " + e.getMessage());
         }
-        br.close();
-        return doctorList;
-    }
-    public static ArrayList<Receptionist> readReceptionists() throws IOException {
-        ArrayList<Receptionist> receptionistList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(RECEPTIONIST_INFO_FILE));
-        String line;
-
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(","); // Assuming comma-separated values
-            Receptionist receptionists = new Receptionist(
-                    parts[0], // firstName
-                    parts[1], // lastName
-                    parts[2], // username
-                    parts[3], // email
-                    parts[4], // password
-                    parts[5], // mobileNumber
-                    parts[6], // age
-                    parts[7]  // gender
-            );
-            receptionistList.add(receptionists);
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/patients.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                patientList.add(Patient.fromString(line));
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading patient data: " + e.getMessage());
         }
-        br.close();
-        return receptionistList;
-    }
-
-    public static void writeDoctorActivities(ArrayList<String> activitiesList) throws IOException {
-        FileWriter fr = new FileWriter("doctor_activities.txt", true);
-        PrintWriter pr = new PrintWriter(fr);
-
-        for (String activity : activitiesList) {
-            pr.println(activity);
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/receptionists.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                receptionistList.add(Receptionist.fromString(line));
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading receptionist data: " + e.getMessage());
         }
-        pr.close();
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/appointments.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                appointmentList.add(Appointment.fromString(line));
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading appointment data: " + e.getMessage());
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/Prescriptions.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                prescriptions.add(Prescription.fromString(line));
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading prescription data: " + e.getMessage());
+        }
     }
 
-    public static void writePatientActivities(ArrayList<String> activitiesList) throws IOException {
-        FileWriter fr = new FileWriter("patient_activities.txt", true);
-        PrintWriter pr = new PrintWriter(fr);
-
-        for (String activity : activitiesList) {
-            pr.println(activity);
-        }
-        pr.close();
-    }
-
-    public static void writeReceptionistActivities(ArrayList<String> activitiesList) throws IOException {
-        FileWriter fr = new FileWriter("receptionist_activities.txt", true);
-        PrintWriter pr = new PrintWriter(fr);
-
-        for (String activity : activitiesList) {
-            pr.println(activity);
-        }
-        pr.close();
-    }
-    public static ArrayList<String> readDoctorActivities() throws IOException {
-        ArrayList<String> doctoractivitiesList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader("doctor_activities.txt"));
-        String line;
-
-        while ((line = br.readLine()) != null) {
-            doctoractivitiesList.add(line);
-        }
-        br.close();
-        return doctoractivitiesList;
-    }
-    public static ArrayList<String> readPatientActivities() throws IOException {
-        ArrayList<String> patientactivitiesList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader("patient_activities.txt"));
-        String line;
-
-        while ((line = br.readLine()) != null) {
-            patientactivitiesList.add(line);
-        }
-        br.close();
-        return patientactivitiesList;
-    }
-
-    public static ArrayList<String> readReceptionistActivities() throws IOException {
-        ArrayList<String> receptionistactivitiesList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader("receptionist_activities.txt"));
-        String line;
-
-        while ((line = br.readLine()) != null) {
-            receptionistactivitiesList.add(line);
-        }
-        br.close();
-        return receptionistactivitiesList;
-    }
 }
-
-
-
-*/
-
-

@@ -1,55 +1,101 @@
 package com.project.zeft;
 
-public  class Appointment {
-    private String patientName;
-    private String date;
-    private String time;
-    private String PhoneNumber;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+public class Appointment {
+    private String patientUserName;
+    private final LocalDate date;
+    private final LocalTime time;
+    private String phoneNumber;
+    private final String doctorUserName;
+    private String Appointed;
+    private final String doctorNum;
 
 
-    public Appointment(String patientName, String PhoneNumber, String date, String time) {
-        this.patientName = patientName;
+    public Appointment(String patientUserName, String phoneNumber, LocalDate date, LocalTime time, String doctorUserName, String doctorNum, String Appointed) {
+        this.patientUserName = patientUserName;
         this.date = date;
         this.time = time;
-        this.PhoneNumber = PhoneNumber;
+        this.phoneNumber = phoneNumber;
+        this.doctorUserName = doctorUserName;
+        this.Appointed = Appointed;
+        this.doctorNum = doctorNum;
+
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+    public LocalDate getDate() {
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public String getPhoneNumber() {
-        return PhoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public String getDate() {
         return date;
     }
 
-    public String getTime() {
+    public LocalTime getTime() {
+
         return time;
     }
 
+    public String getDoctorNum() {
 
+        return doctorNum;
+    }
+
+    public String getPhoneNumber() {
+
+        return phoneNumber;
+    }
+
+    public String getAppointed() {
+
+        return Appointed;
+    }
+
+    public void setAppointed(String appointed) {
+
+        Appointed = appointed;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getDoctorUserName() {
+
+        return doctorUserName;
+    }
+
+    public String getPatientUserName() {
+
+        return patientUserName;
+    }
+
+    public void setPatientUserName(String patientUserName) {
+
+        this.patientUserName = patientUserName;
+    }
 
     @Override
     public String toString() {
-        return "Appointment for " + patientName + " on " + date + " at " + time;
+
+        return patientUserName + "," + phoneNumber + "," + date + "," + time + "," + doctorUserName + "," + doctorNum + "," + Appointed;
     }
+
+    public static Appointment fromString(String line) {
+        String[] fields = line.split(",");
+        try {
+
+            return new Appointment(fields[0],
+                    fields[1],
+                    LocalDate.parse(fields[2], DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                    LocalTime.parse(fields[3], DateTimeFormatter.ofPattern("HH:mm")),
+                    fields[4],
+                    fields[5],
+                    fields[6]);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid date or time format.", e);
+        }
+    }
+
 }
