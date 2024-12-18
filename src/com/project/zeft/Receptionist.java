@@ -16,8 +16,9 @@ public class Receptionist extends User {
     }
 
     public void updateInfo() {
+        pause(1000);
+        clear();
         int choice = inputInt("What do you want to change? \n[1] Email \n[2] Mobile Number");
-
         switch (choice) {
             case 1 -> setEmail(input("Enter new email: "));
             case 2 -> this.mobileNumber = setMobileNumber("Mobile number");
@@ -27,6 +28,8 @@ public class Receptionist extends User {
     }
 
     public void viewAppointments(ArrayList<Appointment> appointmentList) {
+        pause(1000);
+        clear();
         System.out.println("Appointments:");
         System.out.println("=====================================================================================================");
         for (Appointment appointment : appointmentList) {
@@ -46,6 +49,8 @@ public class Receptionist extends User {
     }
 
     public void ReserveAppointment(ArrayList<Appointment> appointmentList, ArrayList<Patient> patientList) {
+        pause(1000);
+        clear();
         String patientName = input("Enter Patient user name: ");
         Patient foundPatient = null;
 
@@ -126,6 +131,8 @@ public class Receptionist extends User {
     }
 
     public void cancelAppointment(ArrayList<Appointment> appointmentList) {
+        pause(1000);
+        clear();
         String Name = input("Enter Patient User Name: ");
         for (Appointment appointment : appointmentList) {
             if (appointment.getAppointed().equals("true") && appointment.getPatientUserName().equals(Name)) {
@@ -135,7 +142,7 @@ public class Receptionist extends User {
             }
         }
         LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
-        LocalTime time = inputTime("Enter time (HH:MM): ");
+        LocalTime time = inputTime("Enter time (HH:MM): ",date);
 
         for (Appointment appointment : appointmentList) {
             if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getPatientUserName().equals(Name)) {
@@ -148,8 +155,9 @@ public class Receptionist extends User {
     }
 
     public void receptionistMenu(ArrayList<Appointment> appointmentList, ArrayList<Patient> patientList) {
-
         do {
+            pause(1000);
+            clear();
             int choice = inputInt("[1] Reserve an appointment for patient \n[2] Cancel Reservation For Patient \n[3] Update Information \n[4] View appointments \n[0] Back\n");
             switch (choice) {
                 case 0 -> {

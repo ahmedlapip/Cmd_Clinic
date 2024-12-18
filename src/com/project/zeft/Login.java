@@ -13,6 +13,8 @@ public class Login extends User {
 
     public void validateDoctor(String username, String password, ArrayList<Appointment> appointmentList,
                                ArrayList<Receptionist> receptionistList, ArrayList<Patient> patientList, ArrayList<Doctor> doctorList, ArrayList<Prescription> prescriptionList) {
+        pause(1000);
+        clear();
         boolean f = false;
         for (Doctor doctor : doctorList) {
             if (doctor.getUsername().equals(username) && doctor.getPassword().equals(password)) {
@@ -27,6 +29,8 @@ public class Login extends User {
 
     public void validatePatient(String username, String password, ArrayList<Patient> patients
             , ArrayList<Doctor> doctors, ArrayList<Appointment> appointmentList, ArrayList<Prescription> prescriptionList) {
+        pause(1000);
+        clear();
         boolean f = false;
         for (Patient patient : patients) {
             if (patient.getUsername().equals(username) && patient.getPassword().equals(password)) {
@@ -41,6 +45,8 @@ public class Login extends User {
 
     public void validateReceptionist(String username, String password, ArrayList<Receptionist> receptionists,
                                      ArrayList<Appointment> appointmentList, ArrayList<Patient> patientList) {
+        pause(1000);
+        clear();
         boolean f = false;
         for (Receptionist receptionist : receptionists) {
             if (receptionist.getUsername().equals(username) && receptionist.getPassword().equals(password)) {
@@ -55,18 +61,14 @@ public class Login extends User {
 
     public void logIn(ArrayList<Doctor> doctors, ArrayList<Patient> patients,
                       ArrayList<Receptionist> receptionists, ArrayList<Appointment> appointmentList, ArrayList<Prescription> prescriptionList) {
-        System.out.println("===========================");
         System.out.println("[1] Login As A Doctor \n[2] Login As A Patient \n[3] Login As A Receptionist");
-        System.out.println("===========================");
-
         boolean Fault_log = false;
         do {
             int choice = inputInt("Enter your choice: ");
-
+            pause(1000);
+            clear();
             String username = input("Enter username: ");
-
             String password = input("Enter Password: ");
-
             switch (choice) {
                 case 1 ->
                         validateDoctor(username, password, appointmentList, receptionists, patients, doctors, prescriptionList);

@@ -81,19 +81,19 @@ public abstract class User {
         return date;
     }
 
-    public static LocalTime inputTime(String prompt) {
+    public static LocalTime inputTime(String prompt,LocalDate date) {
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime time = null;
 
-        while (time == null || time.isBefore(LocalTime.now())) {
+        while (time == null || date.isBefore(LocalDate.now())) {
             System.out.println(prompt);
             String input = scanner.nextLine();
 
             try {
                 time = LocalTime.parse(input, timeFormatter); // Parse the input
 
-                if (time.isBefore(LocalTime.now())) {
+                if (date.isBefore(LocalDate.now())) {
                     System.out.println("Time must be after the current time. Try again.");
                 }
             } catch (DateTimeParseException e) {
@@ -225,7 +225,8 @@ public abstract class User {
         return userInput;
     }
 
-    protected int inputInt(String prompt) {
+    protected int
+    inputInt(String prompt) {
         while (true) {
             try {
                 System.out.print(prompt);
@@ -260,5 +261,56 @@ public abstract class User {
         }
         return userInput;
     }
+
+    public void clear() {
+        try {
+            // For Windows
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            }
+            // For Unix-based systems (Linux/Mac)
+            else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void pause(int num) {
+        try {
+            // For Windows
+            if (System.getProperty("os.name").contains("Windows")) {
+                // Simply wait for 2 seconds without showing "Press any key to continue . . ."
+                Thread.sleep(num); // Pauses for 2 seconds
+            }
+            // For Unix-based systems (Linux/Mac)
+            else {
+                Thread.sleep(num); // Pauses for 2 seconds
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    protected char inputChar(String prompt) {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            try {
+                System.out.print(prompt);
+                String input = scanner.nextLine().toUpperCase();
+
+                // Check if the input is exactly one character
+                if (input.length() == 1) {
+                    return input.charAt(0);
+                } else {
+                    System.out.println("Invalid input. Please enter exactly one character.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please try again.");
+            }
+        }
+    }
+
+
 
 }

@@ -10,7 +10,8 @@ public class Patient extends User {
     protected float weight;
     protected float height;
     static Scanner sc = new Scanner(System.in);
-
+//12
+    //,not,Male,O+,19,60.0,170.0
     public Patient(String firstName, String lastName, String username, String email, String password, String mobileNumber, int age, String gender, String bloodType, String patientHistory, float weight, float height) {
         super(firstName, lastName, username, email, password, mobileNumber);
         this.age = age;
@@ -40,9 +41,11 @@ public class Patient extends User {
     }
 
     public void reserveAppointment(ArrayList<Appointment> appointmentList) {
+        pause(1000);
+        clear();
         showAvailableAppointments(appointmentList);
         LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
-        LocalTime time = inputTime("Enter time (HH:MM): ");
+        LocalTime time = inputTime("Enter time (HH:MM): ",date);
         for (Appointment appointment : appointmentList) {
 
             if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getAppointed().equals("false")) {
@@ -57,6 +60,8 @@ public class Patient extends User {
     }
 
     public void PrescriptionForPatient(ArrayList<Prescription> prescriptionList) {
+        pause(1000);
+        clear();
         boolean bool = false;
         for (Prescription prescription : prescriptionList) {
             if (prescription.getUserName().equals(this.username)) {
@@ -69,8 +74,10 @@ public class Patient extends User {
     }
 
     public void cancelReservation(ArrayList<Appointment> appointmentList) {
+        pause(1000);
+        clear();
         LocalDate date = inputDate("Enter date(yyyy-MM-dd)");
-        LocalTime time = inputTime("Enter time (HH:MM): ");
+        LocalTime time = inputTime("Enter time (HH:MM): ",date);
         for (Appointment appointment : appointmentList) {
             if (appointment.getDate().equals(date) && appointment.getTime().equals(time) && appointment.getPhoneNumber().equals(getMobileNumber())) {
                 appointment.setAppointed("false");
@@ -84,6 +91,8 @@ public class Patient extends User {
     }
 
     public void checkPrices(ArrayList<Appointment> appointmentList) {
+        pause(1000);
+        clear();
         boolean bool = false;
         int count = 0;
         for (Appointment appointment : appointmentList) {
@@ -99,6 +108,8 @@ public class Patient extends User {
     }
 
     public void searchForDoctor(ArrayList<Doctor> doctorList) {
+        pause(1000);
+        clear();
         boolean bool = false;
         String search = input("Enter doctor name or mobile number: ");
         for (Doctor doctor : doctorList) {
@@ -115,14 +126,14 @@ public class Patient extends User {
         if (!bool)
             System.out.println("No doctor found.");
     }
-
+//age, String gender, String bloodType, String patientHistory, float weight, float height
     public String toString() {
-        return super.toString() + "," + patientHistory + "," + bloodType + "," + gender + "," + age + "," + weight + "," + height;
+        return super.toString() + "," + age + "," + gender + "," + bloodType + "," + patientHistory + "," + weight + "," + height;
     }
 
     public static Patient fromString(String data) {
         String[] parts = data.split(",");
-
+//age, String gender, String bloodType, String patientHistory, float weight, float height
         int age = 0;
         try {
             age = Integer.parseInt(parts[6]);
@@ -238,7 +249,10 @@ public class Patient extends User {
     }
 
     public void patientMenu(ArrayList<Doctor> doctorList, ArrayList<Appointment> appointmentList, ArrayList<Prescription> prescriptionList) {
+
         do {
+            pause(1000);
+            clear();
             int choice = inputInt("Choose an option:\n[1]  Reserve Appointment \n[2] Cancel Reservation \n[3] Check Prices \n[4] Search for Doctor \n[5] Show Your Appointments \n[6] Update Information \n[7] Show your Prescription \n[0] Back\n");
 
             switch (choice) {

@@ -2,11 +2,13 @@ package com.project.zeft;
 
 import java.util.ArrayList;
 
-class SignUp extends User {
+class SignUp extends Login {
     private final Login loginSystem = new Login();
 
     public void Sign_Up(ArrayList<Patient> patients, ArrayList<Doctor> doctors, ArrayList<Receptionist> receptionists,
                         ArrayList<Appointment> appointment, ArrayList<Prescription> prescriptionList) {
+        pause(1000);
+        clear();
         System.out.println("=============================================================");
         System.out.println("Welcome to the Dental Clinic. Do you want to Login or Signup?");
         System.out.println("[1] SignUp \n[2] Login");
@@ -44,6 +46,8 @@ class SignUp extends User {
     }
 
     private void registerDoctor(ArrayList<Doctor> doctors, ArrayList<Patient> patients, ArrayList<Receptionist> receptionists, ArrayList<Appointment> Appointment, ArrayList<Prescription> prescriptionList) {
+        pause(500);
+        clear();
         System.out.println("Registering as Doctor:");
         String firstname = input("First Name: ");
         String lastname = input("Last Name: ");
@@ -66,6 +70,8 @@ class SignUp extends User {
     }
 
     private void registerPatient(ArrayList<Patient> patients, ArrayList<Doctor> doctors, ArrayList<Appointment> appointment, ArrayList<Prescription> prescriptionList) {
+        pause(500);
+        clear();
         System.out.println("Registering as Patient:");
         String firstname = input("First Name: ");
         String lastname = input("Last Name: ");
@@ -86,6 +92,8 @@ class SignUp extends User {
     }
 
     private void registerReceptionist(ArrayList<Receptionist> receptionists, ArrayList<Appointment> appointment, ArrayList<Patient> patients) {
+        pause(500);
+        clear();
         System.out.println("Registering as Receptionist:");
         String firstname = input("First Name: ");
         String lastname = input("Last Name: ");

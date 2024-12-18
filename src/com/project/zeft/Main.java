@@ -9,8 +9,8 @@ public class Main {
         ArrayList<Prescription> prescriptions = new ArrayList<>();
         ArrayList<Receptionist> receptionists = new ArrayList<>();
         ArrayList<Appointment> appointments = new ArrayList<>();
-
         Dental_clinic clinic = new Dental_clinic();
+
         FileHandler.loadEntity(doctors, patients, receptionists, appointments, prescriptions);
         clinic.showMenu(doctors, patients, receptionists, appointments, prescriptions);
     }

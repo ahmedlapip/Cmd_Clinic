@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class FileHandler {
 
     public static void saveEntity(ArrayList<Doctor> doctorList, ArrayList<Patient> patientList, ArrayList<Receptionist> receptionistList, ArrayList<Appointment> appointmentList, ArrayList<Prescription> prescriptions) {
-        try (FileWriter writer = new FileWriter("src/doctors.txt")) {
+        try (FileWriter writer = new FileWriter("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/doctors.txt")) {
             for (Doctor doctor : doctorList) {
                 writer.write(doctor.toString() + "\n");
             }
@@ -14,7 +14,7 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error saving doctor data: " + e.getMessage());
         }
-        try (FileWriter writer = new FileWriter("src/patients.txt")) {
+        try (FileWriter writer = new FileWriter("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/patients.txt")) {
             for (Patient patient : patientList) {
                 writer.write(patient.toString() + "\n");
             }
@@ -22,7 +22,7 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error saving patient data: " + e.getMessage());
         }
-        try (FileWriter writer = new FileWriter("src/receptionists.txt")) {
+        try (FileWriter writer = new FileWriter("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/receptionists.txt")) {
             for (Receptionist receptionist : receptionistList) {
                 writer.write(receptionist.toString() + "\n");
             }
@@ -30,7 +30,7 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error saving receptionist data: " + e.getMessage());
         }
-        try (FileWriter writer = new FileWriter("src/appointments.txt")) {
+        try (FileWriter writer = new FileWriter("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/appointments.txt")) {
             for (Appointment appointment : appointmentList) {
                 writer.write(appointment.toString() + "\n");
             }
@@ -38,7 +38,7 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error saving appointment data: " + e.getMessage());
         }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Prescriptions.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/Prescriptions.txt"))) {
             for (Prescription prescription : prescriptions) {
                 writer.write(prescription.toString());
                 writer.newLine();
@@ -51,7 +51,7 @@ public class FileHandler {
 
     public static void loadEntity(ArrayList<Doctor> doctorList, ArrayList<Patient> patientList, ArrayList<Receptionist> receptionistList, ArrayList<Appointment> appointmentList, ArrayList<Prescription> prescriptions) {
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/doctors.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/doctors.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 doctorList.add(Doctor.fromString(line));
@@ -59,7 +59,7 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error loading doctor data: " + e.getMessage());
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/patients.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/patients.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 patientList.add(Patient.fromString(line));
@@ -67,7 +67,7 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error loading patient data: " + e.getMessage());
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/receptionists.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/receptionists.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 receptionistList.add(Receptionist.fromString(line));
@@ -75,7 +75,7 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error loading receptionist data: " + e.getMessage());
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/appointments.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/appointments.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 appointmentList.add(Appointment.fromString(line));
@@ -83,7 +83,7 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error loading appointment data: " + e.getMessage());
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/Prescriptions.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/ahmed/IdeaProjects/Cmd_Clinic/src/Prescriptions.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 prescriptions.add(Prescription.fromString(line));

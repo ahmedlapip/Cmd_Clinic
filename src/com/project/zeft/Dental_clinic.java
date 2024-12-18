@@ -39,6 +39,26 @@ public class Dental_clinic extends SignUp {
         System.out.println("Contact Number: " + this.ContactNumber);
         System.out.println("Email: " + this.Email);
         System.out.println("---------------------------");
+
+        boolean bool = false;
+        do {
+            char c = inputChar("Do you want to Reserve Appointment? (Y/N)\n");
+            switch (c) {
+                case 'Y': {
+                    System.out.println("Sign Up Or Login at first \n");
+
+                    return;
+                }
+                case 'N': {
+
+                    return;
+                }
+                default: {
+                    System.out.println("Invalid choice. Please try again.");
+                    bool = true;
+                }
+            }
+        } while (bool);
     }
 
     public String getName() {
@@ -52,23 +72,33 @@ public class Dental_clinic extends SignUp {
         boolean running = true;
 
         while (running) {
-            System.out.println("\n--- Main Menu ---");
-            choice = inputInt("[1] View Services \n[2] View Clinic Information \n[3] Log In or Sign Up \n[4] Exit\n");
+            pause(1000);
+            clear();
+            System.out.println("\n============================== MAIN MENU ================================");
+            System.out.println("[1] View Services");
+            System.out.println("[2] View Clinic Information");
+            System.out.println("[3] Log In or Sign Up");
+            System.out.println("[4] Exit");
+            System.out.println("==========================================================================");
+            choice = inputInt("Please choose an option (1-4): ");
 
             switch (choice) {
                 case 1:
                     viewServices();
-                    SystemClear.pause();
+
                     break;
                 case 2:
+
                     displayClinicInfo();
-                    SystemClear.pause();
                     break;
                 case 3:
+
                     signUp.Sign_Up(patientList, doctorList, receptionistList, appointmentList, prescriptionList);
                     break;
                 case 4:
                     System.out.println("Thank you for visiting Smile Craft Dental Clinic!");
+                    pause(3000);
+                    clear();
                     running = false;
                     FileHandler.saveEntity(doctorList, patientList, receptionistList, appointmentList, prescriptionList);
                     break;
@@ -84,6 +114,26 @@ public class Dental_clinic extends SignUp {
             System.out.println((i + 1) + ". " + services.get(i) + " - Price: " + prices.get(i) + " EGP");
         }
         System.out.println("---------------------------");
+        boolean bool = false;
+        do {
+            char c = inputChar("Do you want to Reserve Appointment? (Y/N)\n");
+            switch (c) {
+                case 'Y': {
+                    System.out.println("Sign Up Or Login at first \n");
+
+                    return;
+                }
+                case 'N': {
+
+                    return;
+                }
+                default: {
+                    System.out.println("Invalid choice. Please try again.");
+                    bool = true;
+                }
+            }
+        } while (bool);
+
     }
 
 }
